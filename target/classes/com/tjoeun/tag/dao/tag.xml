@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	실행할 sql 명령이 저장된 xml 파일의 namespace에는 
+	반드시 mapper 역할을 하는 인터페이스의 풀 패키지 이름을 적어야 한다.
+ -->
+<mapper namespace="com.tjoeun.tag.dao.MybatisDAO">
+	
+	<!-- 리스트 아이템(트렌드)의 총 개수를 얻어온다 -->
+	<select id="selectCount" resultType="int">
+		select count(*) from trend
+	</select>
+	
+	<!-- 리스트(트렌드)를 얻어온다. -->
+	<select id="selectList" parameterType="java.util.HashMap" resultType="com.tjoeun.tag.vo.TrendVO">
+		select * from (
+			select rownum rnum, TT.* from( 
+				select * from trend order by tnum desc
+			) TT
+		) where rnum between #{startNo} and #{endNo}
+	</select>
+	
+	<!-- 1개의 아이템(트렌드)에 달린 댓글의 총 개수를 얻어온다 -->
+	<select id="selectCommentCount" parameterType="int" resultType="int">
+		select count(*) from tcomment where tnum = #{tnum}
+	</select>
+	
+	<!-- ================================== +수미 =================================== -->
+	<select id="selectByTnum" parameterType="int" resultType="vo">
+		select * from trend where tnum = #{tnum}
+	</select>
+	
+	<select id="selectCountTrend" resultType="int"><!-- selectCount 이랑 중복 -->
+		select count(*) from trend
+	</select>
+	
+	<select id="selectByCnum" parameterType="int" resultType="vo">
+		select * from tcomment where cnum = #{cnum}
+	</select>
+
+	<select id="selectCommentList" parameterType="int" resultType="co">
+		select * from tcomment where tnum = #{tnum} order by cnum desc
+	</select>
+	
+	<select id="selectCommentListCnum" parameterType="int" resultType="co">
+		select * from tcomment where cnum = #{cnum} order by cnum desc
+	</select>
+
+	<select id="selectCountComment" parameterType="int" resultType="int"><!-- selectCommentCount 이랑 중복 -->
+		select count(*) from tcomment where tnum = #{tnum}
+	</select>
+
+	<insert id="insertComment" parameterType="co">
+		insert into tcomment (cnum, tnum, memo, cdate)
+		values ((select nvl(max(cnum), 0) + 1 from tcomment), #{tnum}, #{memo}, #{cdate})
+	</insert>
+	
+	<delete id="deleteComment" parameterType="int">
+		delete from tcomment where cnum =#{cnum}
+	</delete>
+	
+	<update id="report" parameterType="java.util.HashMap">
+		update tcomment set rnum = #{rnum} + 1 where cnum = #{cnum}
+	</update>
+	
+	<insert id="insertScrap" parameterType="int">
+		insert into scrap (snum, tnum) values ((select nvl(max(snum), 0) + 1 from scrap), #{tnum})
+	</insert>
+
+	<update id="insertTrendLike" parameterType="java.util.HashMap">
+		update trend set lnum = #{lnum} + 1 where tnum = #{tnum}
+	</update>
+	
+	<update id="insertCoLike" parameterType="java.util.HashMap">
+		update tcomment set lcnum = #{lcnum} + 1 where cnum = #{cnum}
+	</update>
+	
+	<update id="updateComment" parameterType="com.tjoeun.tag.vo.Param">
+		update tcomment set memo = #{memo}, cdate = sysdate where cnum = #{cnum}
+	</update>
+	
+	<!-- ================================== +건희 =================================== -->
+	
+	<!-- 컨텐츠 개수를 얻어온다. -->
+	<select id="contentCount" resultType="int"><!-- selectCount / selectCountTrend 이랑 중복 -->
+		select count(*) from trend
+	</select>
+	
+	<!-- 컨텐츠(미리보기)를 불러옴 랜덤 20개 -->
+	<select id="contentList" resultType="vo">
+		<![CDATA[
+			select * from ( 
+				select rownum rnum, AA.* from (
+					select * from trend order by dbms_random.value
+				) AA where rownum <= 20
+			) where rnum >= 1
+		]]>
+	</select>
+	
+	<!-- 컨텐츠 검색 -->
+	<select id="contentSearch" parameterType="java.lang.String" resultType="vo">
+		<![CDATA[
+			select * from ( 
+				select rownum rnum, AA.* from (
+					select * from trend where title like '%'||#{searchval}||'%' order by dbms_random.value
+				) AA where rownum <= 20
+			) where rnum >= 1
+		]]>
+	</select>
+	
+	<!-- ================================== +형빈 =================================== -->
+    <!-- 회원정보 insert -->
+    <insert id="SignUp" parameterType="uo">
+        insert into USERINFO(nickname,usernum,userid,pw,email,birth,jdate,bookmark,point)
+        values (#{nickname},usernum_seq.nextval,#{userid},#{pw},#{email},'1999-01-01','2024-06-20','','0')
+    </insert>
+
+    <!-- 닉네임 중복 체크 -->
+    <select id="NickCheck" parameterType="uo" resultType="java.lang.Integer">
+        select COUNT(*) from TESTTABLE where NICKNAME=#{nickname}
+    </select>
+
+    <!-- 닉네임 중복 체크 -->
+    <select id="IdCheck" parameterType="uo" resultType="java.lang.Integer">
+        select COUNT(*) from TESTTABLE where USERID=#{userid}
+    </select>
+    
+	<!-- 로그인 -->
+    <select id="SignIn" parameterType="uo" resultType="java.lang.Integer">
+        select COUNT(*) from TESTTABLE where USERID=#{userid} and pw=#{pw}
+    </select>
+	
+	
+	
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.tjoeun.tag.vo.TrendVO" alias="vo"/>
+		<typeAlias type="com.tjoeun.tag.vo.CommentVO" alias="co"/>
+		<typeAlias type="com.tjoeun.tag.vo.UserVO" alias="uo"/>
+		<typeAlias type="com.tjoeun.tag.vo.TrendList" alias="TrendList"/>
+	</typeAliases>
+</configuration>
+
+
+
+
+
+
+
+
+
+
+
+

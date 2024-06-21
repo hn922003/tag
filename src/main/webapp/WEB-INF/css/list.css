@@ -1,0 +1,33 @@
+body {
+	background-image: url('../images/background009.png');
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: 100% 100%;
+}
+
+.cont {
+	padding: 10px;
+	margin: 10px;
+	border: 1px solid #5A5A5A66;
+   	box-shadow: 0px 0px 0px white, 10px 10px rgba(0,0,0,0.3);
+   	word-wrap: break-word;
+   	transition: 0.25s;
+}
+
+.cont:hover {
+	-webkit-backdrop-filter: contrast(300%);
+	backdrop-filter: contrast(300%);
+	transform: scale(105%, 110%);
+	box-shadow: 0px 0px 15px white, 15px 15px rgba(0,0,0,0.3);
+}
+
+.cont:active {
+	transform: scale(90%, 95%);
+}
+
+.title {
+	font-size: 25px;
+	color: white;
+	-webkit-text-stroke: 1px white;
+	text-shadow: 2px 2px 5px #000000;
+}
