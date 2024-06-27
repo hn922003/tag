@@ -1,10 +1,14 @@
 package com.tjoeun.tag;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
@@ -24,6 +28,7 @@ import com.tjoeun.tag.vo.CommentVO;
 import com.tjoeun.tag.vo.Param;
 import com.tjoeun.tag.vo.TrendList;
 import com.tjoeun.tag.vo.TrendVO;
+import com.tjoeun.tag.vo.UserVO;
 
 @Controller
 public class HomeController {
@@ -44,14 +49,7 @@ public class HomeController {
 	public String index(HttpServletRequest request, Model model) {
 		logger.info("index page");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
-		/* 리스트 저장해서 넘겨주는 동작
-		//AbstractApplicationContext ctx = new GenericXmlApplicationContext("classpath:/applicationCTX.xml");
-		TrendList trendList = ctx.getBean("TrendList", TrendList.class);
-		trendList.setList(mapper.contentList());
 		
-		model.addAttribute("TrendList", trendList);
-		ctx.close();
-		*/ 
 		// 인덱스에 랜덤으로 20개의 리스트를 불러온다.
 		int totalCount = mapper.selectCount();
 		TrendList trendList = new TrendList(20, totalCount, 1); // 페이지사이즈를 20으로
@@ -83,19 +81,11 @@ public class HomeController {
 			searchval = (String) session.getAttribute("searchval");
 		}
 	
-		/*
-		AbstractApplicationContext ctx = new GenericXmlApplicationContext("classpath:/applicationCTX.xml");
-		TrendList trendList = ctx.getBean("TrendList", TrendList.class);
-		trendList.setList(mapper.contentSearch(searchval));
-		model.addAttribute("TrendList", trendList);
-		ctx.close();
-		 */
-		
 		// 검색 리스트를 불러온다.
 		int totalCount = mapper.selectCount();
 		TrendList trendList = new TrendList(20, totalCount, 1); // 페이지사이즈를 20으로
 		trendList.setList(mapper.contentSearch(searchval));
-		System.out.println("===============>" + trendList.getList().size());
+		//System.out.println("===============>" + trendList.getList().size());
 		
 		// 리스트의 트렌드 글 하나(VO)마다 댓글 수를 얻어와 저장한다
 		/*
@@ -106,6 +96,7 @@ public class HomeController {
 		*/
 		// 리스트를 뷰페이지로 넘겨준다.
 		model.addAttribute("trendList", trendList);
+		model.addAttribute("searchNum", trendList.getList().size());
 		
 		
 		return "index";
@@ -125,7 +116,6 @@ public class HomeController {
 	
 	// ================================================== 현담 =================================================
 	
-	// 구조적으로 문제가 있음 ... =>js 사용으로 네이버댓글 처럼 리다이렉트 없이 구현할 것
 	@RequestMapping("/list")
 	// 전체 리스트 불러오고 hidden 상태에서 버튼 누르면 +6개씩
 	public String list(HttpServletRequest request, Model model) {
@@ -157,27 +147,47 @@ public class HomeController {
 	
 	//========================================= + 수미 ====================================================
 	
-	
 	@RequestMapping("/selectByTnum")
-	public String selectByTnum(HttpServletRequest request, Model model, CommentList commentList) {
+	public String selectByTnum(HttpServletRequest request, Model model) {
 		logger.info("HomeController 클래스의 selectByTnum() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+		// 1차 병합 후 전체적으로 변경
 		int tnum = Integer.parseInt(request.getParameter("tnum"));
-		int cnum = mapper.selectCountComment(tnum);
 		TrendVO vo = mapper.selectByTnum(tnum);
-		commentList = new CommentList();
-		commentList.setList(mapper.selectCommentList(tnum));
+		int totalComment = mapper.selectCountComment(tnum);
+		
+		// 댓글 리스트
+		CommentList commentList = new CommentList(totalComment, totalComment, 1);
+		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
+		hmap.put("startNo", commentList.getStartNo());
+		hmap.put("endNo", commentList.getEndNo());
+		hmap.put("tnum", tnum);
+		commentList.setList(mapper.selectCommentList(hmap));
+		
+		// writer가 작성한 또 다른 글
+		TrendList trendList = new TrendList();
+		HashMap<String, String> hmap2 = new HashMap<String, String>();
+		hmap2.put("title", vo.getTitle());
+		hmap2.put("writer", vo.getWriter());
+		trendList.setList(mapper.selectWriterTitle(hmap2));
+		
 		model.addAttribute("vo", vo);
 		model.addAttribute("commentList", commentList);
+		model.addAttribute("trendList", trendList);
 		return "contentViewTrend";
 	}
 	
+	// 닉네임 => 형빈이 추가 코딩으로 변경
 	@RequestMapping("/insertcommentOK")
-	public String insertcommentOK(HttpServletRequest request, Model model, CommentVO co) {
+	public String insertcommentOK(HttpServletRequest request, Model model, CommentVO co, HttpSession session) {
 		logger.info("HomeController 클래스의 insertcommentOK() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
 		String check_memo = request.getParameter("memo");
 		// String nickname = request.getParameter("nickname");
+
+		String nickname = (String) session.getAttribute("nickname");
+		int usernum = (int) session.getAttribute("usernum");
+
 		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		Date cdate = new Date();
 		if (check_memo == "") {
@@ -185,42 +195,52 @@ public class HomeController {
 			return "alert";
 		} else {
 			co.setMemo(check_memo);
-			// co.setNickname(nickname);
+			co.setNickname(nickname);
 			co.setCdate(cdate);
 			co.setTnum(tnum);
+			co.setUsernum(usernum);
 			mapper.insertComment(co);
 		}
-		return selectByTnum(request, model, null);
+		return selectByTnum(request, model);
 	}
 			
 	@RequestMapping("/deletecommentOK")
 	public String deletecommentOK(HttpServletRequest request, Model model) {
 		logger.info("HomeController 클래스의 deletecommentOK() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+		
+		// 댓글 삭제
 		int cnum = Integer.parseInt(request.getParameter("cnum"));
+		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		// System.out.println(cnum);
 		mapper.deleteComment(cnum);
 
-		return selectByTnum(request, model, null);
+		return selectByTnum(request, model);
 	}
 	
 	@RequestMapping("/report")
 	public String report(HttpServletRequest request, Model model) {
 		logger.info("HomeController 클래스의 report() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+		
+		// 댓글 신고
 		int rnum = Integer.parseInt(request.getParameter("rnum"));
 		int cnum = Integer.parseInt(request.getParameter("cnum"));
+		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
 		hmap.put("rnum", rnum);
 		hmap.put("cnum", cnum);
+		hmap.put("tnum", tnum);
 		mapper.report(hmap);
-		return selectByTnum(request, model, null);
+		return selectByTnum(request, model);
 	}
 	
 	@RequestMapping("/scrap")
 	public String scrap(HttpServletRequest request, Model model) {
 		logger.info("HomeController 클래스의 scrap() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+		
+		// 트렌드 글 저장
 		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		// System.out.println(tnum);
 		// String nickname = request.getParameter("nickname");
@@ -228,19 +248,21 @@ public class HomeController {
 		// mapper.scrap(param);
 		mapper.insertScrap(tnum);
 		
-//		int scrap = mapper.scrapCheck(nickname, tnum);
-//		if (scrap == 0) {
-//			mapper.insertScrap(tnum);
-//		} else if (scrap == 1) {
-//			mapper.scrapCancel(nickname, tnum);
-//		} 
-		return selectByTnum(request, model, null);
+//			int scrap = mapper.scrapCheck(nickname, tnum);
+//			if (scrap == 0) {
+//				mapper.insertScrap(tnum);
+//			} else if (scrap == 1) {
+//				mapper.scrapCancel(nickname, tnum);
+//			} 
+		return selectByTnum(request, model);
 	}
 	
 	@RequestMapping("/tlike")
 	public String tlike(HttpServletRequest request, Model model) {
 		logger.info("HomeController 클래스의 tlike() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+		
+		// 트렌드 좋아요
 		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		int lnum = Integer.parseInt(request.getParameter("lnum"));
 		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
@@ -248,13 +270,15 @@ public class HomeController {
 		hmap.put("lnum", lnum);
 		mapper.insertTrendLike(hmap);
 		
-		return selectByTnum(request, model, null);
+		return selectByTnum(request, model);
 	}
 	
 	@RequestMapping("/clike")
 	public String clike(HttpServletRequest request, Model model) {
 		logger.info("HomeController 클래스의 clike() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+		
+		// 댓글 좋아요
 		int cnum = Integer.parseInt(request.getParameter("cnum"));
 		int lcnum = Integer.parseInt(request.getParameter("lcnum"));
 		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
@@ -262,14 +286,17 @@ public class HomeController {
 		hmap.put("lcnum", lcnum);
 		mapper.insertCoLike(hmap);
 		
-		return selectByTnum(request, model, null);
+		return selectByTnum(request, model);
 	}
 	
 	@RequestMapping("/update")
 	public String update(HttpServletRequest request, Model model, CommentList commentList) {
 		logger.info("HomeController 클래스의 update() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+		
+		// 댓글 수정페이지로 가기
 		int cnum = Integer.parseInt(request.getParameter("cnum"));
+		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		commentList.setList(mapper.selectCommentListCnum(cnum));
 		model.addAttribute("commentList", commentList);
 		return "update";
@@ -279,7 +306,10 @@ public class HomeController {
 	public String update(HttpServletRequest request, Model model, CommentVO co) {
 		logger.info("HomeController 클래스의 update() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+	
+		// 댓글 수정
 		int cnum = Integer.parseInt(request.getParameter("cnum"));
+		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		String check_memo = request.getParameter("memo");
 		if (check_memo == "") {
 			request.setAttribute("msg", "후기를 입력해주세요.");
@@ -290,26 +320,23 @@ public class HomeController {
 			mapper.updateComment(param);
 		}
 		
-		return selectByTnum(request, model, null);
+		return selectByTnum(request, model);
 	}
 	
 	@RequestMapping("/numbaseball")
 	public String numbaseball(HttpServletRequest request, Model model) {
 		logger.info("HomeController 클래스의 numbaseball() 메소드 실행");
-		
 		return "numbaseball";
 	}
 	
+	@RequestMapping("/baskinrobbins31")
+	public String baskinrobbins31(HttpServletRequest request, Model model) {
+		logger.info("HomeController 클래스의 baskinrobbins31() 메소드 실행");
+		return "baskinrobbins31";
+	}
+		
 	//========================================= + 형빈 ====================================================
-	 /* 회원가입 페이지 */
-    @RequestMapping("SignUp")
-    public String SignUp()
-    {
-        return "SignUp";
-    }
-
-
-    /* 닉네임 중복 체크 */
+	/* 닉네임 중복 체크 */
     @ResponseBody
     @RequestMapping(value = "/NickCheck", method = RequestMethod.GET)
     public int NickCheck(@RequestParam("nickname") String nickname)
@@ -335,44 +362,95 @@ public class HomeController {
     }
 
 
-    /* 회원가입 Controller */
-    @ResponseBody
-    @RequestMapping(value = "/SignUpOk", method = RequestMethod.POST)
-    public void SignUpOk(@RequestParam(value = "nickname") String nickname, @RequestParam(value = "userid") String userid, @RequestParam(value = "pw") String pw, @RequestParam(value = "email") String email)
-    {
-        // 필요한 요소만을 mapper에 넘겨주기 위한 HashMap
-        HashMap<String, String> map = new HashMap<>();
-        map.put("nickname", nickname);
-        map.put("userid", userid);
-        map.put("pw", pw);
-        map.put("email", email);
+	/* 회원가입 Controller */
+	@ResponseBody
+	@RequestMapping(value = "/SignUpOk", method = RequestMethod.POST)
+	public void SignUpOk(@RequestParam(value = "nickname") String nickname,
+						 @RequestParam(value = "userid") String userid,
+						 @RequestParam(value = "pw") String pw,
+						 @RequestParam(value = "email") String email,
+						 @RequestParam(value = "birth", required = false) String birth) // 생년월일은 입력 안해도 무관하게 구성
+	{
+		// 필요한 요소만을 mapper에 넘겨주기 위한 HashMap
+		HashMap<String, String> map = new HashMap<>();
 
-        MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
-        mapper.SignUp(map);
-    }
+		/* 가입 일자를 가져오기 위한 Date 생성 */
+		Date date = new Date();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String dateStr = simpleDateFormat.format(date);
 
+		/* 회원가입에 필요한 요소를 map으로 묶기 */
+		map.put("nickname", nickname);
+		map.put("userid", userid);
+		map.put("pw", pw);
+		map.put("email", email);
+		map.put("birth", birth);
+		map.put("jdate",dateStr);
 
-    /* 로그인 controller */
-    @ResponseBody
-    @RequestMapping(value = "/SignInOk", method = RequestMethod.POST)
-    public int SignInOk(@RequestParam(value = "userid") String userid, @RequestParam(value = "pw") String pw)
-    {
-        // 필요한 요소만을 mapper에 넘겨주기 위한 HashMap
-        HashMap<String, String> map = new HashMap<>();
-        map.put("userid", userid);
-        map.put("pw", pw);
+		/* DB에 insert하는 구문 실행 */
+		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+		mapper.SignUp(map);
+	}
 
-        System.out.println(map);
+	/* 로그인 controller */
+	@ResponseBody
+	@RequestMapping(value = "/SignInOk", method = RequestMethod.POST)
+	public String SignInOk(@RequestParam(value = "userid") String userid,
+						   @RequestParam(value = "pw") String pw,
+						   HttpSession session)
+	{
+		// 필요한 요소만을 mapper에 넘겨주기 위한 HashMap
+		HashMap<String, String> map = new HashMap<>();
+		map.put("userid", userid);
+		map.put("pw", pw);
 
-        MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
-        mapper.SignIn(map);
+		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+		if ((mapper.IdCheck(userid) + mapper.PwCheck(map)) == 2)
+		{
+			UserVO result = mapper.SignIn(map);
+			session.setAttribute("nickname",result.getNickname());
+			session.setAttribute("usernum",result.getUsernum());
 
-        System.out.println(mapper.SignIn(map));
+			return result.getNickname();
+		}
+		else if((mapper.IdCheck(userid) + mapper.PwCheck(map)) == 1)
+		{
+			return "1";
+		}
+		else
+		{
+			return "0";
+		}
+	}
 
-        return mapper.SignIn(map);
-    }
-	
-	
+	@RequestMapping("/logout")
+	public String logout(HttpSession session)
+	{
+		session.invalidate();
+		return "redirect:index";
+	}
+
+	/* 내 정보 페이지로 이동 */
+	@RequestMapping("/Myinfo")
+	public String Myinfo(Model model,HttpSession session, HttpServletResponse response) throws IOException
+	{
+		// 테스트의 편의성을 위해 로그인 확인 로직 주석처리
+		if (session.getAttribute("nickname") != null)
+		{
+			MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+			UserVO uo = mapper.Myinfo((String) session.getAttribute("nickname"));
+			model.addAttribute("uo",uo);
+			return "Myinfo";
+		}
+		else
+		{
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>alert('로그인 후 이용 가능합니다.');location.href='./list'</script>");
+			out.flush();
+			return "";
+		}
+	}
 	
 }
 

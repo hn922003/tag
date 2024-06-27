@@ -45,7 +45,7 @@
 	</beans:bean>
 		
 	<!-- Mybatis sqlsesson (mapper 생성) 설정: sqlSessionFactory 정보를 참조한다. -->
-	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
 		<beans:constructor-arg index="0" ref="sqlSessionFactory"/>
 	</beans:bean>
 	

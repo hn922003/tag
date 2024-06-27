@@ -1,5 +1,6 @@
 <%@page import="javax.swing.filechooser.FileNameExtensionFilter"%>
 <%@page import="com.tjoeun.tag.vo.TrendVO"%>
+<%@page import="com.tjoeun.tag.vo.UserVO"%>
 <%@page import="java.text.Collator"%>
 <%@page import="java.util.Comparator"%>
 <%@page import="java.util.Collections"%>
@@ -25,45 +26,33 @@
   		background-size: 100% 100%;
 	}
 	
-	.header {
-		height: 10rem;
-		min-width: 60rem;
-	}
-	
-	.logo {
-		transition: 0.25s;
-	}
-	
-	.logo:hover {
-		box-shadow: 0px 0px 1em white, 0.5em 0.5em rgba(0,0,0,0.3);
-	}
-	
 </style>
 <title>Trend</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-<link rel="icon" href="./images/logo.jpg" type="image/x-icon">
-<script type="text/javascript" src="./js/link.js" defer="defer"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<script type="text/javascript" src="./js/mainjs.js" defer="defer"></script>
-<script type="text/javascript" src="./js/Account.js" defer="defer"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<link rel="icon" href="./images/logo.jpg" type="image/x-icon">
+	<script type="text/javascript" src="./js/link.js" defer="defer"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<script type="text/javascript" src="./js/mainjs.js" defer="defer"></script>
+	<script type="text/javascript" src="./js/Account.js" defer="defer"></script>
 </head>
-<!-- 위로 아래로 버튼 -->
-<a id="toTop" class="position-fixed bottom-0 end-0 m-5" href="#" style="display: none;">
-	<i class="bi bi-arrow-up-circle-fill text-success" style="color: white; font-size: 230%"></i>
-</a>
-<a id="toDown" class="position-fixed bottom-0 end-0 m-5" href="#footer" style="display: none;">
-	<i class="bi bi-arrow-down-circle-fill text-success" style="color: white; font-size: 230%;"></i>
-</a>
+
+<div style="position: fixed; bottom: 80px; right: 40px;">
+	<a href="#"><i class="bi bi-arrow-up-circle" style="color: grey; background-color: white; font-size: 40px;"></i></a>
+</div>
+<div style="position: fixed; bottom: 30px; right: 40px;">
+	<a href="#footer"><i class="bi bi-arrow-down-circle" style="color: grey; background-color: white; font-size: 40px;"></i></a>
+</div>
 
 <body>
 
 	<!-- 콘텐츠 헤더 부분 -->
-	<div class="header" style="display: flex; align-items: center; justify-content: space-around; width: 100%;">
-		<img class="logo" alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
+	<!-- 헤더 -->
+	<div class="header" style="display: flex; align-items: center; justify-content: space-around; border: 1px solid silver; width: 100%;">
+		<img alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
 		
 		<div style="display: flex; justify-content: center; flex-grow: 1;">
 			<button type="button" class="btn btn-outline-dark" style="width: 50%;" onclick="location.href='list'"><i class="bi bi-list">List</i></button>
@@ -83,8 +72,7 @@
 			<button type="button" class="btn btn-outline-dark" onclick="showloginbox()"><i class="bi bi-person"></i></button>
 		</div>
 	</div>
-	
-	<!-- 로그인, 회원가입, 마이페이지 박스 -->
+
 	<div id="loginbox"
 		 style="position: absolute;
 			top: 6.5rem;
@@ -264,83 +252,72 @@
 			</div>
 		</div>
 	</div>
-	
-	<c:if test="${searchNum == 0}">
-		<div style="width: 100%; text-align: center;">
-			<span class="title">검색 결과가 없습니다</span>
-		</div>
-	</c:if>
 
 	<!-- 콘텐츠 바디 부분 -->
-	<!-- 통합 후 기능 추가(바디 전체적으로) -->
-	<main class="container text-center pt-1">
-		<div class="container px-4 px-lg-5">
-			<div class="container px-2">
+	<main class="container text-center pt-1" style="background-color: pink">
+		<div class="container px-4 px-lg-5" style="background-color: dodgerblue">
+			<div class="container px-2" style="background-color: green">
 				<fmt:formatDate var="tdate" value="${vo.tdate}" pattern="yy.MM.dd HH:mm:ss" />
 				<br /><h2>${vo.title}</h2><br />
 				<p>${vo.tag}</p><br/>
 				<!-- 이미지 -->
-				<!-- 이미지 저장할 때 맨 처음에 나오는 이미지는 '-'없이 숫자만 저장, 그 이후 이미지들은 '-' 붙여서 저장해야 잘 구현됨 -->
+				<!-- Carousel -->
 				<%
-					String imagePath = application.getRealPath("/WEB-INF/images");
-					File imageDir = new File(imagePath);
-					File[] files = imageDir.listFiles();
-					List<String> imageFiles = new ArrayList<>();
-					TrendVO vo = (TrendVO) request.getAttribute("vo");
-					int tnum = vo.getTnum();
-					/* out.println("<p>tnum: " + tnum + "</p>"); */
-					if (files != null) {
-						for (File file : files) {
-							if (file.isFile() && file.getName().startsWith(tnum + "-")) {
-								/* out.println("<p>File found: " + file.getName() + "</p>"); */
-								imageFiles.add(file.getName());
-							}
+				String imagePath = application.getRealPath("/WEB-INF/images");
+				File imageDir = new File(imagePath);
+				File[] files = imageDir.listFiles();
+				List<String> imageFiles = new ArrayList<>();
+
+				if (files != null) {
+					/* String tnum = vo.getTnum(); */
+					for (File file : files) {
+						if (file.isFile() && file.getName().startsWith("2-")) {
+							/* out.println("<p>File found: " + file.getName() + "</p>"); */
+							imageFiles.add(file.getName());
 						}
-						/* 이미지 파일 정렬 */
-						Collections.sort(imageFiles, new Comparator<String>() {
-			                @Override
-			                public int compare(String o1, String o2) {
-			                    return Collator.getInstance().compare(o1, o2);
-			                }
-			            });
-					} else {
-						out.println("<p>No files found in the directory.</p>");
 					}
+					/* 이미지 파일 정렬 */
+					Collections.sort(imageFiles, new Comparator<String>() {
+		                @Override
+		                public int compare(String o1, String o2) {
+		                    return Collator.getInstance().compare(o1, o2);
+		                }
+		            });
+				} else {
+					out.println("<p>No files found in the directory.</p>");
+				}
 				%>
-				<!-- 슬라이드 -->
-				<div class="container text-center" style="width: 100%; height: 550px;">
+				<div class="container text-center" style="background-color: tan; width: 100%; height: 700px;">
 					<div id="trend" class="mx-3 carousel slide" data-bs-ride="carousel" style="width: 97%">
-						<div class="carousel-indicators">
-				  	  		<button type="button" data-bs-target="#trend" data-bs-slide-to="0" class="active" style="background-color: black;"></button>
-						  	<c:forEach var="i" begin="1" end="<%=imageFiles.size()%>">
-							  	<button type="button" data-bs-target="#trend" data-bs-slide-to="${i}" style="background-color: black;"></button>
-						  	</c:forEach>  
-					  	</div>
-						<div class="carousel-inner text-center align-middle">
-							<div class="carousel-item active">
-								<img src="./images/<%= tnum %>.png" alt="<%= tnum %>" class="container px-2 d-flex justify-content-center d-block w-60" style="width: 70%; height: 500px;" />
+						<!-- The slideshow/carousel -->
+						<div class="carousel-inner">
+							<div class="carousel-item active align-middle">
+								<img src="./images/2.png" alt="2-1" class="container px-2 d-flex justify-content-center d-block w-60" style="width: 70%"/>
 							</div>
 							<%
 								for (String fileName : imageFiles) {
 									/* out.println("<p>filename: " + fileName + "</p>"); */
 							%>
 									<div class="carousel-item">
-										<img src="image?name=<%= fileName %>" alt="<%= fileName %>"  class="container px-2 d-flex justify-content-center d-block w-60" style="width: 70%; height: 500px;"/><br/>
+										<img src="image?name=<%= fileName %>" alt="<%= fileName %>"  class="container px-2 d-flex justify-content-center d-block w-60" style="width: 70%"/><br/>
 									</div>
+							<!-- <div class="carousel-item">
+						    	<img src="ny.jpg" alt="New York" class="d-block w-100">
+						    </div> -->
 							<%
 								}
 							%>
 						</div>
-						<!-- 오른쪽/왼쪽 버튼 -->
-						<button class="carousel-control-prev" type="button" data-bs-target="#trend" data-bs-slide="prev" style="height: 500px;">
-							<span><i class="bi bi-chevron-left" style="color: black; font-size: 300%;"></i></span>
+						<!-- Left and right controls/icons -->
+						<button class="carousel-control-prev" type="button" data-bs-target="#trend" data-bs-slide="prev" style="background-color: black">
+							<span class="carousel-control-prev-icon"></span>
 						</button>
-						<button class="carousel-control-next" type="button" data-bs-target="#trend" data-bs-slide="next" style="height: 500px;">
-							<span><i class="bi bi-chevron-right" style="color: black; font-size: 300%;"></i></span>
+						<button class="carousel-control-next" type="button" data-bs-target="#trend" data-bs-slide="next" style="background-color: black">
+							<span class="carousel-control-next-icon"></span>
 						</button>
 					</div>
 				</div>
-				<!-- 블로그 방식 -->
+
 				<%-- <% 
 					/* List<TrendVO> imageVOList = new ArrayList<>();
 			        imageVOList.add(new ImageVO("1"));
@@ -380,13 +357,15 @@
 		        <%
 		            }
 		        %>  --%>
+				<!-- <img src="./images/1.png" alt="trend" style="width: 80%"/> -->
 
-				<%-- <br /><br /><p>${vo.maintext}</p><br /><br /> --%>
+				<br /><br /><p>${vo.maintext}</p><br /><br />
 				<p class="d-flex justify-content-end">작성일: ${tdate}</p>
 				<p class="d-flex justify-content-end">작성자: ${vo.writer}</p>
+				<br />
 			</div>
 			<!-- 좋아요, 스크랩, 공유, 목록보기 -->
-			<div class="container px-2 d-flex justify-content-center" style="font-size: 120%;">
+			<div class="container px-2 d-flex justify-content-center" style="background-color: cyan; font-size: 30px;">
 				<p>
 					<button class="btn" type="button" onclick="location.href='tlike?tnum=${vo.tnum}&lnum=${vo.lnum}'">
 						<i class="bi bi-heart" style="color: red;"></i>&nbsp;${vo.lnum}
@@ -402,13 +381,13 @@
 					</button>
 				</p>
 			</div>
-			<form class="container px-2 d-flex justify-content-end" method="post">
+			<form class="container px-2 d-flex justify-content-end" method="post" style="background-color: purple;">
 				<input type="hidden" name="list" value="list" />
-				<button class="btn" type="button" onclick="location.href='list'">목록보기</button>
-			</form><hr/>
+				<button class="btn btn-outline-warning" type="button" onclick="location.href='list'">목록보기</button>
+			</form>
 			<!-- 댓글 -->
-			<div class="container px-2">
-				<br /><h2 class="d-flex justify-content-start">댓글(${commentList.totalComment})</h2><br />
+			<div class="container px-2" style="background-color: orange">
+				<br /><br /><h2 class="d-flex justify-content-start">댓글</h2><br />
 				<!-- 댓글 입력 -->
 				<form action="insertcommentOK" method="post" name="commentForm">
 					<%
@@ -431,7 +410,6 @@
 						<button class="btn btn-outline-success" type="submit" name="commentForm" style="width: 7%">등록</button>
 					</div><br />
 					</c:if>
-
 					<!-- 테스트 후 화면에 보이지 않게 한다. -->
 					<div style="display: none">
 						<!-- 입력할 댓글의 트렌드번호 -->
@@ -446,143 +424,91 @@
 				<!-- 댓글 출력 -->
 				<c:set var="comment" value="${commentList.list}" />
 				<!-- 후기가 없는 경우 -->
-				<div class="container px-lg-1">
+				<div class="container px-lg-1" style="background-color: yellow;">
 					<div class="row">
 						<c:if test="${comment.size() == 0}">
-							<div class="col-md-9">
-								<h4>첫 번째 후기를 남겨주세요!</h4>
+							<div class="col-md-9" style="background-color: tomato;">
+								<li class="list-group-item" style="background-color: lightgoldenrodyellow;">
+									<h4>첫 번째 후기를 남겨주세요!</h4>
+								</li>
 							</div>
-							<div class="col-md-3 align-items-center">
-								<div class="aside text-center align-middle">
-								<br /><h4>${vo.writer}가 작성한 다른 글 <i class="bi bi-tags-fill" style="color: #3CB371;"></i></h4>
-								<ul class="list-group list-group-flush" style="border-radius: 6px; box-shadow: 0px 0px 0px white, 10px 10px rgba(0,0,0,0.3);">
-									<c:forEach var="trendList" items="${trendList.list}">
-										<li class="list-group-item" style="background-color: #f3f9ef">
-											<a href="selectByTnum?tnum=${trendList.tnum}" style="color: black; text-decoration: none;"><i class="bi bi-cursor-fill" style="color: #4682B4"></i> ${trendList.title}</a>
-										</li>
-									</c:forEach>
-								</ul><br /><br />
-								<a href="#" style="color: black; text-decoration: none;">
-									<i class="bi bi-joystick" style="font-size: 500%;"></i>
-									<h4>게임하러 가기</h4>
-								</a><br />
-								</div>
+							<div class="col-md-3" style="background-color: lavender">
+								<br /><h3>${vo.writer}가 작성한 다른 글</h3>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item"><a href="#">제목제목제목제목제목제목제목</a></li>
+									<li class="list-group-item"><a href="#">제목2</a></li>
+									<li class="list-group-item"><a href="#">제목3</a></li>
+									<li class="list-group-item"><a href="#">제목4</a></li>
+									<li class="list-group-item"><a href="#">제목5</a></li>
+								</ul><br /> 
+								<a href="#"><img src="./images/1-1.png" style="width: 80%" /></a> <a href="#"><h3>게임하러 가기</h3></a><br />
 							</div>
 						</c:if>
 					</div>
 				</div>
 				<!-- 후기가 있는 경우 -->
-				<div class="container px-lg-1">
+				<div class="container px-lg-1" style="background-color: yellow;">
 					<div class="row">
 						<c:if test="${comment.size() != 0}">
-							<div class="col-md-9">
+							<div class="col-md-9" style="background-color: tomato;">
 								<ul class="list-group">
-									<c:forEach var="co" items="${comment}" varStatus="view">
+									<c:forEach var="co" items="${comment}">
 										<c:set var="nickname" value="${fn:replace(co.nickname, '<', '&lt;')}" />
 										<c:set var="nickname" value="${fn:replace(nickname, '>', '&gt;')}" />
 										<fmt:formatDate var="cdate" value="${co.cdate}" pattern="yy.MM.dd HH:mm:ss" />
-										<c:if test="${view.index < 5}">
-											<li class="list-group-item" style="background-color: #e7f6e5; border-radius: 6px;">
-												<div class="row mt-3">
-													<span class="col-sm-4 d-flex justify-content-first">
-														<span>${co.nickname}</span>&nbsp;&nbsp;
-														<span>${cdate}</span> 
-													</span> 
-													<span class="col-sm-8 d-flex justify-content-end">
-														<button class="btn" type="button" onclick="location.href='clike?cnum=${co.cnum}&lcnum=${co.lcnum}&tnum=${co.tnum}'">
-															<i class="bi bi-heart" style="color: red;"></i>&nbsp;${co.lcnum}
-														</button> 
-														<input type="hidden" id="rnum" name="rnum" value="${co.rnum}" />
-														<input type="hidden" id="cnum" name="cnum" value="${co.cnum}" />
-														<input type="hidden" id="tnum" name="tnum" value="${co.tnum}" />
-														<button class="btn" type="button" name="rep" onclick="reportbtn();" style="color: red; font-weight: bold;">신고</button>
-													</span>
-													<c:set var="memo" value="${fn:replace(co.memo, '<', '&lt;')}" /> 
-													<c:set var="memo" value="${fn:replace(memo, '>', '&gt;')}" /> 
-													<c:set var="memo" value="${fn:replace(memo, enter, '<br/>')}" />
-													<p class="d-flex justify-content-first">${memo}</p>
-													<!-- 닉네임 일치시에만 댓글 수정 / 삭제 -->
+										<li class="list-group-item" style="background-color: lightgoldenrodyellow;">
+											<div class="row mt-3">
+												<span class="col-sm-4 d-flex justify-content-first">
+													<%-- ${comment} --%> 
+													<span>${co.nickname}</span>&nbsp;&nbsp;
+													<span>${cdate}</span> <%-- <span><fmt:formatDate value="${co.cdate}" pattern="yy.MM.dd"/></span> --%>
+												</span> 
+												<span class="col-sm-8 d-flex justify-content-end">
+													<button class="btn" type="button" onclick="location.href='clike?cnum=${co.cnum}&lcnum=${co.lcnum}'">
+														<i class="bi bi-heart" style="color: red;"></i>&nbsp;${co.lcnum}
+													</button> 
+													<input type="hidden" id="rnum" name="rnum" value="${co.rnum}" />
+													<input type="hidden" id="cnum" name="cnum" value="${co.cnum}" />
+													<button class="btn" type="button" name="rep" onclick="reportbtn();" style="color: red; font-weight: bold;">신고</button>
+													<%-- <button class="btn" type="button" onclick="location.href='report?rnum=${co.rnum}&cnum=${co.cnum}'" style="color: red; font-weight: bold;">신고</button> --%>
+												</span>
+											</div> 
+											<c:set var="memo" value="${fn:replace(co.memo, '<', '&lt;')}" /> 
+											<c:set var="memo" value="${fn:replace(memo, '>', '&gt;')}" /> 
+											<c:set var="memo" value="${fn:replace(memo, enter, '<br/>')}" />
+											<p class="d-flex justify-content-first">${memo}</p>
+												<p class="d-flex justify-content-end">
 													<c:set var="sessionNick" value="<%=nickname%>"/>
 													<c:if test="${co.nickname == sessionNick}">
-														<p class="d-flex justify-content-end">
-															<span>
-																<button class="btn btn-outline-warning" onclick="window.open('update?cnum=' + ${co.cnum} + '&tnum=' + ${vo.tnum}, 'update', 'width = 500, height = 400, top = 100, left = 200, location = no')">수정</button>
-																<script type="text/javascript">
-																	window.name = 'trend'
-																</script>
-															</span>
-															<span>
-																<button class="btn btn-outline-danger" onclick="location.href='deletecommentOK?cnum=${co.cnum}&size=${comment.size()}&tnum=${vo.tnum}'">삭제</button>
-															</span>
-														</p>
+														<span>
+															<input type="hidden" id="cnum" name="cnum" value="${co.cnum}"/>
+															<%-- <input type="hidden" id="cdate" name="cdate" value="${co.cdate}"/> --%>
+															<button class="btn btn-outline-warning" onclick="window.open('update?cnum=' + ${co.cnum}, 'update', 'width = 500, height = 400, top = 100, left = 200, location = no')">수정</button>
+															<script type="text/javascript">
+																window.name = 'trend'
+															</script>
+															<%-- <button class="btn btn-outline-warning" onclick="location.href='update?nickname=${co.nickname}'")>수정</button> --%>
+														</span>
+														<span>
+															<button class="btn btn-outline-danger" onclick="location.href='deletecommentOK?cnum=${co.cnum}&size=${comment.size()}'">삭제</button>
+														</span>
 													</c:if>
-												</div> 
-											</li>
-										</c:if>
-										<c:if test="${view.index >= 5}">
-											<li class="trc list-group-item" style="display: none; background-color: #e7f6e5; border-radius: 6px;">
-												<div class="row mt-3">
-													<span class="col-sm-4 d-flex justify-content-first">
-														<span>${co.nickname}</span>&nbsp;&nbsp;
-														<span>${cdate}</span> 
-													</span> 
-													<span class="col-sm-8 d-flex justify-content-end">
-														<button class="btn" type="button" onclick="location.href='clike?cnum=${co.cnum}&lcnum=${co.lcnum}'">
-															<i class="bi bi-heart" style="color: red;"></i>&nbsp;${co.lcnum}
-														</button> 
-														<input type="hidden" id="rnum" name="rnum" value="${co.rnum}" />
-														<input type="hidden" id="cnum" name="cnum" value="${co.cnum}" />
-														<button class="btn" type="button" name="rep" onclick="reportbtn();" style="color: red; font-weight: bold;">신고</button>
-													</span>
-													<c:set var="memo" value="${fn:replace(co.memo, '<', '&lt;')}" /> 
-													<c:set var="memo" value="${fn:replace(memo, '>', '&gt;')}" /> 
-													<c:set var="memo" value="${fn:replace(memo, enter, '<br/>')}" />
-													<p class="d-flex justify-content-first">${memo}</p>
-													
-													<!-- 닉네임 일치시에만 댓글 수정 / 삭제 -->
-													<c:set var="sessionNick" value="<%=nickname%>"/>
-													<c:if test="${co.nickname == sessionNick}">
-														<p class="d-flex justify-content-end">
-															<span>
-																<button class="btn btn-outline-warning" onclick="window.open('update?cnum=' + ${co.cnum} + '&tnum=' + ${vo.tnum}, 'update', 'width = 500, height = 400, top = 100, left = 200, location = no')">수정</button>
-																<script type="text/javascript">
-																	window.name = 'trend'
-																</script>
-															</span>
-															<span>
-																<button class="btn btn-outline-danger" onclick="location.href='deletecommentOK?cnum=${co.cnum}&size=${comment.size()}&tnum=${vo.tnum}'">삭제</button>
-															</span>
-														</p>
-													</c:if>
-												</div> 
-											</li>
-										</c:if>
+												</p>
+										</li>
 									</c:forEach>
 								</ul>
 							</div>
-							<div class="col-md-3 align-items-center">
-								<div class="aside text-center align-middle">
-								<br /><h4>${vo.writer}가 작성한 다른 글 <i class="bi bi-tags-fill" style="color: #3CB371;"></i></h4>
-								<ul class="list-group list-group-flush" style="border-radius: 6px; box-shadow: 0px 0px 0px white, 10px 10px rgba(0,0,0,0.3);">
-									<c:forEach var="trendList" items="${trendList.list}">
-										<li class="list-group-item" style="background-color: #f3f9ef">
-											<a href="selectByTnum?tnum=${trendList.tnum}" style="color: black; text-decoration: none;"><i class="bi bi-cursor-fill" style="color: #4682B4"></i> ${trendList.title}</a>
-										</li>
-									</c:forEach>
-								</ul><br /><br />
-								<a href="#" style="color: black; text-decoration: none;">
-									<i class="bi bi-joystick" style="font-size: 500%;"></i>
-									<h4>게임하러 가기</h4>
-								</a><br />
-								</div>
-							</div>
-							<!-- 더보기 버튼 -->
-							<div id="morediv" class="col-md-9">
-								<c:if test="${commentList.totalComment > 5}">
-									<button id="morebtn" class="btn" type="button" onclick="morebtn()">더보기<i class="bi bi-caret-down-fill"></i></button>
-								</c:if>
-								<input id="morecount" value=0 type="hidden"/>
-								<input id="last" value="${commentList.totalComment}" type="hidden"/>
+							<div class="col-md-3" style="background-color: lavender">
+								<br /><h3>${vo.writer}가 작성한 다른 글</h3>
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item"><a href="#">제목제목제목제목제목제목제목</a></li>
+									<li class="list-group-item"><a href="#">제목2</a></li>
+									<li class="list-group-item"><a href="#">제목3</a></li>
+									<li class="list-group-item"><a href="#">제목4</a></li>
+									<li class="list-group-item"><a href="#">제목5</a></li>
+								</ul><br /> 
+								<a href="#"><img src="./images/1-1.png" style="width: 80%" /></a> 
+								<a href="#"><h3>게임하러 가기</h3></a><br />
 							</div>
 						</c:if>
 					</div>
@@ -590,7 +516,6 @@
 			</div>
 		</div><br />
 	</main>
-
 
 	<footer id="footer" class="container bg-dark">
 		<br /><br />

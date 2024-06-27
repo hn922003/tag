@@ -2,81 +2,39 @@ package com.tjoeun.tag.vo;
 
 import java.util.Date;
 
-public class UserVO {
-	private String title;
-	private String maintext;
-	private String tag;
-	private int tnum;
-	private String writer;
-	private int lnum;
-	private int usernum;
-	private int views;
-	private Date tdate;
-	private int ccount;
-	
-	public UserVO() {	}
+public class UserVO
+{
+	private String nickname; // 닉네임
+	private int usernum; // 유저번호
+	private String userid; // 아이디
+	private String pw; // 패스워드
+	private String email; // 이메일
+	private Date birth; // 생일
+	private Date jdate; // 가입일자
+	private String bookmark; // 즐겨찾기
+	private int point; // 포인트
 
-	public UserVO(String title, String maintext, String tag, int tnum, String writer, int lnum, int usernum, int views,
-			Date tdate, int ccount) {
-		super();
-		this.title = title;
-		this.maintext = maintext;
-		this.tag = tag;
-		this.tnum = tnum;
-		this.writer = writer;
-		this.lnum = lnum;
+	public UserVO(String nickname, int usernum, String userid, String pw, String email, Date birth, Date jdate, String bookmark, int point) {
+		this.nickname = nickname;
 		this.usernum = usernum;
-		this.views = views;
-		this.tdate = tdate;
-		this.ccount = ccount;
+		this.userid = userid;
+		this.pw = pw;
+		this.email = email;
+		this.birth = birth;
+		this.jdate = jdate;
+		this.bookmark = bookmark;
+		this.point = point;
 	}
 
-	public String getTitle() {
-		return title;
+	public UserVO() {
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public String getNickname() {
+		return nickname;
 	}
 
-	public String getMaintext() {
-		return maintext;
-	}
-
-	public void setMaintext(String maintext) {
-		this.maintext = maintext;
-	}
-
-	public String getTag() {
-		return tag;
-	}
-
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
-
-	public int getTnum() {
-		return tnum;
-	}
-
-	public void setTnum(int tnum) {
-		this.tnum = tnum;
-	}
-
-	public String getWriter() {
-		return writer;
-	}
-
-	public void setWriter(String writer) {
-		this.writer = writer;
-	}
-
-	public int getLnum() {
-		return lnum;
-	}
-
-	public void setLnum(int lnum) {
-		this.lnum = lnum;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 
 	public int getUsernum() {
@@ -87,36 +45,74 @@ public class UserVO {
 		this.usernum = usernum;
 	}
 
-	public int getViews() {
-		return views;
+	public String getUserid() {
+		return userid;
 	}
 
-	public void setViews(int views) {
-		this.views = views;
+	public void setUserid(String userid) {
+		this.userid = userid;
 	}
 
-	public Date getTdate() {
-		return tdate;
+	public String getPw() {
+		return pw;
 	}
 
-	public void setTdate(Date tdate) {
-		this.tdate = tdate;
+	public void setPw(String pw) {
+		this.pw = pw;
 	}
 
-	public int getCcount() {
-		return ccount;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setCcount(int ccount) {
-		this.ccount = ccount;
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Date getBirth() {
+		return birth;
+	}
+
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+
+	public Date getJdate() {
+		return jdate;
+	}
+
+	public void setJdate(Date jdate) {
+		this.jdate = jdate;
+	}
+
+	public String getBookmark() {
+		return bookmark;
+	}
+
+	public void setBookmark(String bookmark) {
+		this.bookmark = bookmark;
+	}
+
+	public int getPoint() {
+		return point;
+	}
+
+	public void setPoint(int point) {
+		this.point = point;
 	}
 
 	@Override
 	public String toString() {
-		return "TrendVO [title=" + title + ", maintext=" + maintext + ", tag=" + tag + ", tnum=" + tnum + ", writer="
-				+ writer + ", lnum=" + lnum + ", usernum=" + usernum + ", views=" + views + ", tdate=" + tdate
-				+ ", ccount=" + ccount + "]";
+		return "userVO{" +
+				"nickname='" + nickname + '\'' +
+				", usernum=" + usernum +
+				", userid='" + userid + '\'' +
+				", pw='" + pw + '\'' +
+				", email='" + email + '\'' +
+				", birth=" + birth +
+				", jdate=" + jdate +
+				", bookmark='" + bookmark + '\'' +
+				", point=" + point +
+				'}';
 	}
-
-	
 }

@@ -9,6 +9,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<style type="text/css">
+	body {
+		background-image: url('./images/background007.png');
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+  		background-size: 100% 100%;
+	}
+</style>
 </head>
 <body>
 	<%-- ${commentList} --%>
@@ -24,13 +32,14 @@
 		    </div>
 		</div>
 		<div class="m-2 d-flex justify-content-center">
-			<textarea name="memo" style="resize: none; width: 470px; height: 200px;">${co.memo}</textarea>
+			<textarea name="memo" style="background-color: #f3f9ef; border-radius: 6px; resize: none; width: 470px; height: 200px;">${co.memo}</textarea>
 		</div>
 		<div class="m-3">
 			<span class="d-flex justify-content-end">
 				<input class="btn btn-outline-success btn-sm" type="reset" value="다시쓰기"/>
 				<button class="btn btn-outline-warning btn-sm" type="submit" name="updateForm" onclick="submitForm();">수정하기</button>
 				<input type="hidden" id="cnum" name="cnum" value="${co.cnum}"/>
+				<input type="hidden" id="tnum" name="tnum" value="${co.tnum}"/>
 				<input type="hidden" id="memo" name="memo"/>
 			</span>
 		</div>

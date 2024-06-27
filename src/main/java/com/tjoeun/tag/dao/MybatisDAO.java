@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.tjoeun.tag.vo.CommentVO;
 import com.tjoeun.tag.vo.Param;
 import com.tjoeun.tag.vo.TrendVO;
+import com.tjoeun.tag.vo.UserVO;
 
 public interface MybatisDAO {
 
@@ -18,13 +19,11 @@ public interface MybatisDAO {
 	//================================= + 수미 ==============================
 	TrendVO selectByTnum(int tnum);
 
-	int selectCountTrend();
-
-	CommentVO selectByCnum(int cnum);
-
-	ArrayList<CommentVO> selectCommentList(int tnum);
-
 	int selectCountComment(int tnum);
+
+	ArrayList<CommentVO> selectCommentList(HashMap<String, Integer> hmap);
+
+	ArrayList<TrendVO> selectWriterTitle(HashMap<String, String> hmap2);
 
 	void insertComment(CommentVO co);
 
@@ -42,6 +41,7 @@ public interface MybatisDAO {
 	ArrayList<CommentVO> selectCommentListCnum(int cnum);
 
 	void updateComment(Param param);
+
 	
 	//======================================== +건희 ===========================================
 	int contentCount();
@@ -49,12 +49,16 @@ public interface MybatisDAO {
 	ArrayList<TrendVO> contentSearch(String searchval);
 	
 	//======================================== +형빈 ===========================================
-	 /* 로그인 and 회원가입 */
+	/* 로그인 and 회원가입 */
     void SignUp(HashMap<String, String> vo);
 
     int NickCheck(String nickname);
 
-    int IdCheck(String userid);
+	int IdCheck(String userid);
 
-    int SignIn(HashMap<String, String> vo);
+	int PwCheck(HashMap<String, String> vo);
+
+	UserVO SignIn(HashMap<String, String> vo);
+
+	UserVO Myinfo(String nickname);
 }

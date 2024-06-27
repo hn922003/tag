@@ -63,3 +63,10 @@ function pills_close(){
 		document.getElementById('loginbox').style.display = 'none'
 	}
 }
+
+$(() => { 
+   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+   var tooltipList = tooltipTriggerList.map(tooltipTriggerEl => {
+     return new bootstrap.Tooltip(tooltipTriggerEl)
+   })
+})

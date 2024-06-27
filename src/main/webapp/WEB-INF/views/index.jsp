@@ -10,7 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 <style type="text/css">
 	
 	html { 
@@ -30,9 +30,23 @@
 	    -ms-user-select: none;
 	}
 	
+	.header {
+		height: 10rem;
+		min-width: 60rem;
+	}
+	
+	.logo {
+		transition: 0.25s;
+	}
+	
+	.logo:hover {
+		box-shadow: 0px 0px 1em white, 0.5em 0.5em rgba(0,0,0,0.3);
+	}
+	
 	.container-fluid {
 		width: 100%;
-		height: 40rem;
+		height: 50rem;
+		min-width: 60rem;
 	}
 	
 	.cont {
@@ -42,31 +56,85 @@
 		margin: 5px;
 		width: 90%;
 		height: 90%;
-		border-radius: 0.5rem;
-		border: 1px solid #5A5A5A66;
-    	box-shadow: 0px 0px 0px white, 0.625rem 0.625rem rgba(0,0,0,0.3);
+		border-radius: 10px;
+		border: 2px solid #5A5A5A66;
+    	box-shadow: 0px 0px 0em white, 0.5em 0.5em rgba(0,0,0,0.3);
     	word-wrap: break-word;
-    	overflow: auto;
     	transition: 0.25s;
 	}
 	
 	.cont:hover {
 		transform: scale(105%, 110%);
-		box-shadow: 0px 0px 1rem white, 0.625rem 0.625rem rgba(0,0,0,0.3);
+		box-shadow: 0px 0px 1em white, 0.7em 0.7em rgba(0,0,0,0.3);
 	}
 	
 	.cont:active {
 		transform: scale(90%, 95%);
 	}
 	
+	.btn {
+		-webkit-backdrop-filter: contrast(200%); 
+		backdrop-filter: contrast(200%);
+	}
+	
 	.title {
-		font-family: "Anton", sans-serif;
-	 	font-weight: 400;
-	 	font-style: normal;
+		font-family: "Noto Sans KR", sans-serif;
+		font-optical-sizing: auto;
+		font-weight: 900;
+		font-style: normal;
 	 	font-size: 1.5rem;
-	 	-webkit-text-stroke: 0.5px black;
 		color: white;
 		text-shadow: 2px 2px 5px #000000;
+	}
+	
+	.title1 {
+		display: -webkit-box;
+	  	-webkit-line-clamp: 2;
+	 	-webkit-box-orient: vertical;
+	 	text-overflow: ellipsis;
+	 	overflow: hidden;
+	 	line-height: 2rem;
+		max-height: 4rem;
+	}
+	
+	.title2 {
+		display: -webkit-box;
+	  	-webkit-line-clamp: 3;
+	 	-webkit-box-orient: vertical;
+	 	text-overflow: ellipsis;
+	 	overflow: hidden;
+	 	line-height: 2rem;
+		max-height: 6rem;
+	}
+	
+	.ttext {
+		font-family: "Noto Sans KR", sans-serif;
+		font-optical-sizing: auto;
+		font-weight: 900;
+		font-style: normal;
+	 	font-size: 1rem;
+		color: white;
+		text-shadow: 2px 2px 5px #000000;
+	}
+	
+	.ttext1 {
+		display: -webkit-box;
+	  	-webkit-line-clamp: 2;
+	 	-webkit-box-orient: vertical;
+	 	text-overflow: ellipsis;
+	 	overflow: hidden;
+	 	line-height: 2rem;
+		max-height: 4rem;
+	}
+	
+	.ttext2 {
+		display: -webkit-box;
+	  	-webkit-line-clamp: 7;
+	 	-webkit-box-orient: vertical;
+	 	text-overflow: ellipsis;
+	 	overflow: hidden;
+	 	line-height: 2rem;
+		max-height: 14rem;
 	}
 	
 </style>
@@ -79,30 +147,37 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script type="text/javascript" src="./js/mainjs.js" defer="defer"></script>
+<script type="text/javascript" src="./js/Account.js" defer="defer"></script>
 </head>
 <body>
 
-<div class="header" style="display: flex; align-items: center; justify-content: space-around; border: 1px solid silver; width: 100%; height: 10rem;">
-	<img alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
-	<div style="flex-grow: 1;"></div>
+<!-- 헤더 영역 -->
+<div class="header" style="display: flex; align-items: center; justify-content: space-around; width: 100%;">
+	<img class="logo" alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
+	
+	<div style="display: flex; justify-content: center; flex-grow: 1;">
+		<button type="button" class="btn btn-outline-dark" style="width: 50%;" onclick="location.href='list'"><i class="bi bi-list">List</i></button>
+	</div>
+	
 	<div id="searchbox" style="display: none;">
 		<form id="search" action="search" method="post">
 			<div style="display: flex;">
 				<input type="text" class="form-control" name="searchval" maxlength="10" placeholder="Search">
-				<button type="submit" style="-webkit-backdrop-filter: contrast(300%); backdrop-filter: contrast(300%);" class="btn btn-warning">Search</button>
+				<button type="submit" class="btn btn-outline-light">Search</button>
 			</div>
 		</form>
 	</div>
-	<div>
+	<div style="width: 10rem;">
 		<button type="button" class="btn btn-outline-dark" onclick="showsearchbox()"><i class="bi bi-search"></i></button>
 		<button type="button" class="btn btn-outline-dark" onclick="location.href='game1'"><i class="bi bi-joystick"></i></button>
 		<button type="button" class="btn btn-outline-dark" onclick="showloginbox()"><i class="bi bi-person"></i></button>
 	</div>
 </div>
 
+<!-- 로그인, 회원가입, 마이페이지 박스 -->
 <div id="loginbox"
 	 style="position: absolute;
-			top: 5rem; 
+			top: 6.5rem; 
 			right: 2rem;
 			padding: 1rem;
 			display: none;
@@ -119,9 +194,10 @@
 	<div class="tab-content">
 	  <div id="pills-login" style="width: 20rem; display: block;">
 	    <form>
-	      <!-- Email input -->
+	      <!-- ID input -->
+			<%-- 수정 - type="email"에서 type="text"로 변경 및 id 변경--%>
 	      <div data-mdb-input-init class="form-outline mb-4">
-	        <input type="email" id="loginName" class="form-control" placeholder="Username"/>
+	        <input type="text" id="loginId" class="form-control" placeholder="Username"/>
 	      </div>
 	
 	      <!-- Password input -->
@@ -146,7 +222,8 @@
 	      </div>
 	
 	      <!-- Submit button -->
-	      <button type="submit" style="width: 100%;" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block mb-4">Login</button>
+			<%-- 수정 - onclick 이벤트 추가 --%>
+	      <button type="submit" style="width: 100%;" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block mb-4" onclick="SignInOk()">Login</button>
 		  
 		  <div class="text-center mb-4">
 	        <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark btn-floating mx-1">
@@ -195,31 +272,41 @@
 	      </div>
 	
 	      <div class="text-center mb-2">or:</div>
-	
-	      <!-- Name input -->
-	      <div data-mdb-input-init class="form-outline mb-4">
-	        <input type="text" id="registerName" class="form-control" placeholder="Name"/>
-	      </div>
-	
-	      <!-- Username input -->
-	      <div data-mdb-input-init class="form-outline mb-4">
-	        <input type="text" id="registerUsername" class="form-control" placeholder="Username"/>
-	      </div>
-	
-	      <!-- Email input -->
-	      <div data-mdb-input-init class="form-outline mb-4">
-	        <input type="email" id="registerEmail" class="form-control" placeholder="Email"/>
-	      </div>
-	
-	      <!-- Password input -->
-	      <div data-mdb-input-init class="form-outline mb-4">
-	        <input type="password" id="registerPassword" class="form-control" placeholder="Password"/>
-	      </div>
-	
-	      <!-- Repeat Password input -->
-	      <div data-mdb-input-init class="form-outline mb-4">
-	        <input type="password" id="registerRepeatPassword" class="form-control" placeholder="Repeat Password"/>
-	      </div>
+			<%-- 수정 - 회원가입 폼 --%>
+			<!-- 닉네임 입력 -->
+			<div data-mdb-input-init class="form-outline mb-4">
+				<input type="text" id="nickname" class="form-control" placeholder="Nickname" oninput="NickCheck()"/>
+				<span id="NickCheckMsg"></span>
+			</div>
+
+			<!-- 이메일 입력 -->
+			<div data-mdb-input-init class="form-outline mb-4">
+				<input type="email" id="email" class="form-control" placeholder="Email"/>
+			</div>
+
+			<!-- 아이디 입력 -->
+			<div data-mdb-input-init class="form-outline mb-4">
+				<input type="text" id="userid" class="form-control" placeholder="ID" oninput="IdCheck()"/>
+				<span id="IdCheckMsg"></span>
+			</div>
+
+			<!-- 비밀번호 입력 -->
+			<div data-mdb-input-init class="form-outline mb-4">
+				<input type="password" id="pw" class="form-control" placeholder="Password" oninput="PwCheck()"/>
+			</div>
+
+			<!-- 비밀번호 입력 및 비밀번호 확인 -->
+			<div data-mdb-input-init class="form-outline mb-4">
+				<input type="password" id="pwCheck" class="form-control" placeholder="Repeat Password" oninput="PwCheck()"/>
+				<span id="PwCheckMsg"></span>
+			</div>
+
+			<%-- 생년월일 추가 --%>
+			<div data-mdb-input-init class="form-outline mb-4">
+				<label for="birth">생년월일(선택)</label>
+				<input type="date" id="birth" class="form-control"/>
+			</div>
+			<%-- 윗줄까지 복사 --%>
 	
 	      <!-- Checkbox -->
 	      <div class="form-check d-flex justify-content-center mb-4">
@@ -231,7 +318,7 @@
 	      </div>
 	
 	      <!-- Submit button -->
-	      <button type="submit" style="width: 100%;" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block mb-3">Sign in</button>
+	      <button type="submit" style="width: 100%;" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block mb-3" onclick="SignUpOK()">Sign in</button>
 	    </form>
 	  </div>
 	  <div id="pills-mypage" style="width: 20rem; display: none;">
@@ -241,7 +328,13 @@
 	               <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
 	                 alt="No images"
 	                 style="width: 80px; padding: 5px; border-radius: 10px;">
-				<span class="loginInfo"><strong>Username</strong></span><br/>
+				<span class="loginInfo">
+					<%-- 수정 - 닉네임 부분을 세션으로 변경 --%>
+					<%
+						session = request.getSession();
+						out.println(session.getAttribute("nickname"));
+					%>
+				</span><br/>
 			</div>
 	    </div>
 	    <div data-mdb-input-init class="form-outline mb-4">
@@ -258,14 +351,22 @@
 	</div>
 </div>
 
-<div class="container-fluid" style="display: flex; justify-content: center;">
-	<c:set var="trendlist" value="${trendList.list}"/>
+<c:if test="${searchNum == 0}">
+	<div style="width: 100%; text-align: center;">
+		<span class="title">검색 결과가 없습니다</span>
+	</div>
+</c:if>
 
+<!-- 컨텐츠 목록 부분 -->
+<div class="container-fluid" style="display: flex; justify-content: center;">
+	<!-- DB Trend list -->
+	<c:set var="trendlist" value="${trendList.list}"/>
+	
+	<!-- 컨텐츠 왼쪽 영역(왼쪽 3개 박스) -->
 	<div style="display: grid;
 				grid-template-columns: 100%; 
 				grid-template-rows: repeat(4, 25%); 
-				width: 25%;
-				border: 1px solid silver;">
+				width: 25%;">
 		<c:forEach var="trend" items="${trendlist}" begin="0" end="2">
 			<% 
 				String letters = "0123456789ABCDEF";
@@ -275,19 +376,23 @@
 				}
 				colorcode += "A8";
 			%>
-			<div class="cont left" style="width: 95%; background-color: <%=colorcode %>" onclick="location.href='content?tnum=${trend.tnum}'">
-				<span class="title">${trend.title}</span>
+			<div class="cont left" style="width: 95%; background-color: <%=colorcode %>" 
+				data-bs-toggle="tooltip" 
+				data-bs-placement="top"
+				title="${trend.title}"
+				onclick="location.href='selectByTnum?tnum=${trend.tnum}'">
+				<span class="title title1">${trend.title}</span><br/>
+				<span class="ttext ttext1">${trend.maintext}</span>
 			</div>
 		</c:forEach>
 	</div>
 	
 	
-	
+	<!-- 컨텐츠 가운데 왼쪽 영역(가운데 왼쪽 8개 박스) -->
 	<div style="display: grid;
 				grid-template-columns: 50% 50%; 
 				grid-template-rows: repeat(4, 25%); 
-				width: 25%;
-				border: 1px solid silver;">
+				width: 25%;">
 		<c:forEach var="trend" items="${trendlist}" begin="3" end="10">
 			<% 
 				String letters = "0123456789ABCDEF";
@@ -297,17 +402,21 @@
 				}
 				colorcode += "A8";
 			%>
-			<div class="cont mid" style="background-color: <%=colorcode %>; float: left;" onclick="location.href='content?tnum=${trend.tnum}'">
-				<span class="title">${trend.title}</span>
+			<div class="cont mid" style="background-color: <%=colorcode %>; float: left;" 
+				data-bs-toggle="tooltip" 
+				data-bs-placement="top"
+				title="${trend.title}"
+				onclick="location.href='selectByTnum?tnum=${trend.tnum}'">
+				<span class="title title2">${trend.title}</span>
 			</div>
 		</c:forEach>
 	</div>
-		
+	
+	<!-- 컨텐츠 가운데 오른쪽 영역(가운데 오른쪽 4개 박스) -->
 	<div style="display: grid;
 				grid-template-columns: 100%; 
 				grid-template-rows: repeat(4, 25%);  
-				width: 12.5%;
-				border: 1px solid silver;">
+				width: 12.5%;">
 		<c:forEach var="trend" items="${trendlist}" begin="11" end="14">
 			<% 
 				String letters = "0123456789ABCDEF";
@@ -317,19 +426,23 @@
 				}
 				colorcode += "A8";
 			%>
-			<div class="cont mid" style="background-color: <%=colorcode %>;" onclick="location.href='content?tnum=${trend.tnum}'">
-				<span class="title">${trend.title}</span>
+			<div class="cont mid" style="background-color: <%=colorcode %>;" 
+				data-bs-toggle="tooltip" 
+				data-bs-placement="top"
+				title="${trend.title}"
+				onclick="location.href='selectByTnum?tnum=${trend.tnum}'">
+				<span class="title title2">${trend.title}</span>
 			</div>
 		</c:forEach>
 	</div>
 	
+	<!-- 컨텐츠 오른쪽 영역(오른쪽 5개 박스, 하나씩 구현됨) -->
 	<div style="display: grid;
-				grid-template-columns: repeat(3, 33.333%); 
+				grid-template-columns: repeat(3, 33.3333%); 
 				grid-template-rows: repeat(4, 25%);
 				grid-auto-flow: row dense;
 				grid-auto-flow: column dense;
-				width: 37.5%;
-				border: 1px solid silver;">
+				width: 37.5%;">
 		<c:forEach var="trend" items="${trendlist}" begin="15" end="15">
 			<% 
 				String letters = "0123456789ABCDEF";
@@ -339,8 +452,13 @@
 				}
 				colorcode += "A8";
 			%>
-			<div class="cont right" style="width: 95%; height: 95%; grid-column: 1 / 3; grid-row: 1 / 3; background-color: <%=colorcode %>;" onclick="location.href='content?tnum=${trend.tnum}'">
-				<span class="title">${trend.title}</span>
+			<div class="cont right" style="width: 95%; height: 95%; grid-column: 1 / 3; grid-row: 1 / 3; background-color: <%=colorcode %>;" 
+				data-bs-toggle="tooltip" 
+				data-bs-placement="top"
+				title="${trend.title}"
+				onclick="location.href='selectByTnum?tnum=${trend.tnum}'">
+				<span class="title title2">${trend.title}</span><br/>
+				<span class="ttext ttext2">${trend.maintext}</span>
 			</div>
 		</c:forEach>
 		<c:forEach var="trend" items="${trendlist}" begin="16" end="16">
@@ -352,8 +470,13 @@
 				}
 				colorcode += "A8";
 			%>
-			<div class="cont right2" style="width: 95%; grid-column: 1 / 3; grid-row: 3 / 4; background-color: <%=colorcode %>;" onclick="location.href='content?tnum=${trend.tnum}'">
-				<span class="title">${trend.title}</span>
+			<div class="cont right2" style="width: 95%; grid-column: 1 / 3; grid-row: 3 / 4; background-color: <%=colorcode %>;" 
+				data-bs-toggle="tooltip" 
+				data-bs-placement="top"
+				title="${trend.title}"
+				onclick="location.href='selectByTnum?tnum=${trend.tnum}'">
+				<span class="title title1">${trend.title}</span><br/>
+				<span class="ttext ttext1">${trend.maintext}</span>
 			</div>
 		</c:forEach>
 		<c:forEach var="trend" items="${trendlist}" begin="17" end="17">
@@ -365,8 +488,12 @@
 				}
 				colorcode += "A8";
 			%>
-			<div class="cont mid4" style="grid-column: 3 / 4; grid-row: 3 / 4; background-color: <%=colorcode %>;" onclick="location.href='content?tnum=${trend.tnum}'">
-				<span class="title">${trend.title}</span>
+			<div class="cont mid4" style="grid-column: 3 / 4; grid-row: 3 / 4; background-color: <%=colorcode %>;" 
+				data-bs-toggle="tooltip" 
+				data-bs-placement="top"
+				title="${trend.title}"
+				onclick="location.href='selectByTnum?tnum=${trend.tnum}'">
+				<span class="title title2">${trend.title}</span>
 			</div>
 		</c:forEach>
 		<c:forEach var="trend" items="${trendlist}" begin="18" end="18">
@@ -378,8 +505,12 @@
 				}
 				colorcode += "A8";
 			%>
-			<div class="cont mid4" style="grid-column: 1 / 2; grid-row: 4 / 5; background-color: <%=colorcode %>;" onclick="location.href='content?tnum=${trend.tnum}'">
-				<span class="title">${trend.title}</span>
+			<div class="cont mid4" style="grid-column: 1 / 2; grid-row: 4 / 5; background-color: <%=colorcode %>;" 
+				data-bs-toggle="tooltip" 
+				data-bs-placement="top"
+				title="${trend.title}"
+				onclick="location.href='selectByTnum?tnum=${trend.tnum}'">
+				<span class="title title2">${trend.title}</span>
 			</div>
 		</c:forEach>
 		<c:forEach var="trend" items="${trendlist}" begin="19" end="19">
@@ -391,8 +522,13 @@
 				}
 				colorcode += "A8";
 			%>
-			<div class="cont mid4" style="width: 95%; grid-column: 2 / 4; grid-row: 4 / 5; background-color: <%=colorcode %>;" onclick="location.href='content?tnum=${trend.tnum}'">
-				<span class="title">${trend.title}</span>
+			<div class="cont mid4" style="width: 95%; grid-column: 2 / 4; grid-row: 4 / 5; background-color: <%=colorcode %>;" 
+				data-bs-toggle="tooltip" 
+				data-bs-placement="top"
+				title="${trend.title}"
+				onclick="location.href='selectByTnum?tnum=${trend.tnum}'">
+				<span class="title title1">${trend.title}</span><br/>
+				<span class="ttext ttext1">${trend.maintext}</span>
 			</div>
 		</c:forEach>
 		
