@@ -3,9 +3,12 @@ package com.tjoeun.tag;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,14 +59,6 @@ public class HomeController {
 		trendList.setList(mapper.contentList());
 		System.out.println("===============>" + trendList.getList().size());
 		
-		// 리스트의 트렌드 글 하나(VO)마다 댓글 수를 얻어와 저장한다
-		/*
-		for (int i = 0; i < trendList.getList().size(); i++) {
-			int ccount = mapper.selectCommentCount(trendList.getList().get(i).getTnum());
-			trendList.getList().get(i).setCcount(ccount);
-		}
-		*/
-		
 		// 리스트를 뷰페이지로 넘겨준다.
 		model.addAttribute("trendList", trendList);
 		return "index";
@@ -87,13 +82,6 @@ public class HomeController {
 		trendList.setList(mapper.contentSearch(searchval));
 		//System.out.println("===============>" + trendList.getList().size());
 		
-		// 리스트의 트렌드 글 하나(VO)마다 댓글 수를 얻어와 저장한다
-		/*
-		for (int i = 0; i < trendList.getList().size(); i++) {
-			int ccount = mapper.selectCommentCount(trendList.getList().get(i).getTnum());
-			trendList.getList().get(i).setCcount(ccount);
-		}
-		*/
 		// 리스트를 뷰페이지로 넘겨준다.
 		model.addAttribute("trendList", trendList);
 		model.addAttribute("searchNum", trendList.getList().size());
@@ -144,6 +132,131 @@ public class HomeController {
 		return "list";
 	}
 	
+	// 게임 리스트 페이지로
+	@RequestMapping("/list2")
+	public String list2(HttpServletRequest request, Model model) {
+		System.out.println("컨트롤러 리스트2 메소드 실행");
+		
+		// 현재 완성된 게임 3가지 필수 출력 후 나머지 부분은 트렌트로 채움
+		
+		// 맵퍼를 불러온다
+		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+		
+		// 전체 리스트를 불러온다.
+		int totalCount = mapper.selectCount();
+		TrendList trendList = new TrendList(totalCount, totalCount, 1); // 페이지사이즈를 totalCount로
+		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
+		hmap.put("startNo", trendList.getStartNo());
+		hmap.put("endNo", trendList.getEndNo());
+		trendList.setList(mapper.selectList(hmap));
+		System.out.println("===============>" + trendList.getList().size());
+		
+		// 리스트의 트렌드 글 하나(VO)마다 댓글 수를 얻어와 저장한다
+		for (int i = 0; i < trendList.getList().size(); i++) {
+			int ccount = mapper.selectCommentCount(trendList.getList().get(i).getTnum());
+			trendList.getList().get(i).setCcount(ccount);
+		}
+		// 리스트를 뷰페이지로 넘겨준다.
+		model.addAttribute("trendList", trendList);
+		
+		return "list2";
+	}
+	
+	// 업다운 게임 페이지로 이동
+	@RequestMapping("/updown") 
+	public String updown(HttpServletRequest request, Model model) {
+		System.out.println("컨트롤러 home 메소드 실행 => 게임페이지 로딩");
+		// 세션 초기화
+		HttpSession session = request.getSession();
+		session.invalidate();
+		
+		// 정답 숫자 생성
+		Random random = new Random();
+		int answer = random.nextInt(100) + 1;
+		
+		// 뷰페이지로 전달
+		model.addAttribute("answer", answer);
+		model.addAttribute("chance", 10);
+		
+		return "updown";
+	}
+	
+	// 업다운게임 - 정답제출
+	@RequestMapping(value = "/answer", method = RequestMethod.POST)
+	public String answer(HttpServletRequest request, Model model) {
+		System.out.println("컨트롤러 answer 메소드 실행 => 정답입력 후 로딩");
+		int trynum = Integer.parseInt(request.getParameter("trynum"));//입력한 정답
+		int answer = Integer.parseInt(request.getParameter("answer"));// 실제 정답
+		model.addAttribute("answer", answer);
+		int chance = Integer.parseInt(request.getParameter("chance"));// 남은 기회
+		HttpSession session = request.getSession(); 
+		
+		System.out.println(trynum + "===============" + answer + "===========" + chance);
+		ArrayList<Integer> prenums = null;
+		try {// 입력한 정답 리스트 => 세션 저장
+			prenums = (ArrayList<Integer>) session.getAttribute("prenums");
+			// 찬스가 남아있고 정답이 아니면서 이전에 추측한 수가 아닐때 추가한다.
+			if (chance > 0 && trynum != answer && prenums.indexOf(trynum) < 0) {
+				prenums.add(trynum);
+			}
+			session.setAttribute("prenums", prenums);
+		} catch (Exception e) {
+			prenums = new ArrayList<Integer>();
+			prenums.add(trynum);
+			session.setAttribute("prenums", prenums);
+		}
+		
+		if (chance >= 1) { // 시도 횟수가 1 이상이면 게임 진행
+			if (trynum == answer) { // 정답
+				model.addAttribute("result", "와우~! 당신의 <span class='text-danger bg-success-subtle h4 fw-bold px-3'>승리</span>입니다." );
+				model.addAttribute("result2", "정답은 <span class='text-danger h2 fw-bold'>" + answer + "</span> 입니다.");
+				model.addAttribute("chance", 0);
+				return "updown";
+			} else if (trynum < answer) { // UP
+				model.addAttribute("result", "<span class='text-danger'>Up <i class='bi bi-arrow-up-circle-fill'></i></span> " + (chance - 1) + "번의 기회가 남았습니다...");
+				if (chance <= 4) {
+					model.addAttribute("result", "<span class='text-danger'>Up <i class='bi bi-arrow-up-circle-fill'></i></span> " + (chance - 1) + "번 남았습니다...<span style='color:white; background-color:crimson;'>집중하세요!</span>");
+				}
+				int closeup = trynum;
+				for (int num:prenums) { // 넘어온 값과 오답 값들을 비교해 최대값을 찾아서 넘겨준다
+					if (num < answer) {// 오답값이 정답보다 작을때만
+						closeup = num > closeup ? num:closeup;
+					}
+				}
+				session.setAttribute("closeup", closeup);
+			} else { // DOWN
+				model.addAttribute("result", "<span class='text-primary'>Down <i class='bi bi-arrow-down-circle-fill'></i></span> " + (chance - 1) + "번의 기회가 남았습니다...");
+				if (chance <= 4) {
+					model.addAttribute("result", "<span class='text-primary'>Down <i class='bi bi-arrow-down-circle-fill'></i></span> <span style='color:white; background-color:crimson;'>" + (chance - 1) + "번 남았습니다...집중하세요!</span>");
+				}
+				int closedown = trynum;
+				for (int num:prenums) { // 넘어온 값과 오답 값들을 비교해 최소값을 찾아서 넘겨준다
+					if (num > answer) {// 오답값이 정답보다 클때만
+						closedown = num < closedown ? num:closedown;
+					}
+				}
+				session.setAttribute("closedown", closedown);
+			}
+			model.addAttribute("chance", chance - 1); // 시도횟수 -1
+			
+			// 패배조건 chance == 1
+			if (chance == 1) { // 시도횟수가 1이면
+				model.addAttribute("result", "안타깝네요!... 당신의 <span class='text-primary bg-success-subtle h4 fw-bold px-3'>패배</span>입니다.");
+				model.addAttribute("result2", "정답은 <span class='text-danger h2 fw-bold'>" + answer + "</span> 입니다.");
+				model.addAttribute("chance", chance - 1);
+				return "updown";
+			}
+		}
+		return "updown";
+	}
+	
+	// 업다운 게임 - 새로운 게임
+	@RequestMapping("/restart")
+	public String restart(HttpServletRequest request, Model model) {
+		System.out.println("컨트롤러 restart 메소드 실행 => 새로운 게임페이지 로딩");
+		//return home(request, model);
+		return updown(request, model);
+	}
 	
 	//========================================= + 수미 ====================================================
 	
@@ -151,11 +264,9 @@ public class HomeController {
 	public String selectByTnum(HttpServletRequest request, Model model) {
 		logger.info("HomeController 클래스의 selectByTnum() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
-		// 1차 병합 후 전체적으로 변경
 		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		TrendVO vo = mapper.selectByTnum(tnum);
 		int totalComment = mapper.selectCountComment(tnum);
-		
 		// 댓글 리스트
 		CommentList commentList = new CommentList(totalComment, totalComment, 1);
 		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
@@ -219,73 +330,145 @@ public class HomeController {
 	}
 	
 	@RequestMapping("/report")
-	public String report(HttpServletRequest request, Model model) {
+	public String report(HttpServletRequest request, Model model, HttpSession session) {
 		logger.info("HomeController 클래스의 report() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
 		
 		// 댓글 신고
+		int usernum = (int) session.getAttribute("usernum");
+		System.out.println("usernum: " + usernum);
 		int rnum = Integer.parseInt(request.getParameter("rnum"));
 		int cnum = Integer.parseInt(request.getParameter("cnum"));
+		System.out.println("cnum: " + cnum);
 		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
+		hmap.put("usernum", usernum);
 		hmap.put("rnum", rnum);
 		hmap.put("cnum", cnum);
-		hmap.put("tnum", tnum);
-		mapper.report(hmap);
+		int reportfirst = mapper.reportfirst(hmap);
+		System.out.println("reportfirst: " + reportfirst);
+		if (reportfirst == 0) {
+			mapper.insertTrendReport(hmap);
+			mapper.reportInsert(hmap);
+			request.setAttribute("msg", "신고접수완료");
+			request.setAttribute("url", "selectByTnum");
+			return "alert";
+		} else if (reportfirst != 0) {
+			int report = mapper.report(hmap);
+			System.out.println("report: " + report);
+			if (report == 0) {
+				mapper.insertTrendReport(hmap);
+				mapper.reportUpdate(hmap);
+				request.setAttribute("msg", "이미 신고하셨습니다.");
+				request.setAttribute("url", "selectByTnum");
+				return "alert";
+			} else if (report > 0) {
+				request.setAttribute("msg", "이미 신고하셨습니다.");
+				request.setAttribute("url", "selectByTnum");
+				return "alert";
+			}
+		}
+		model.addAttribute("tnum", tnum);
 		return selectByTnum(request, model);
 	}
 	
 	@RequestMapping("/scrap")
-	public String scrap(HttpServletRequest request, Model model) {
+	public String scrap(HttpServletRequest request, Model model, HttpSession session) {
 		logger.info("HomeController 클래스의 scrap() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
 		
-		// 트렌드 글 저장
+		int usernum = (int) session.getAttribute("usernum");
 		int tnum = Integer.parseInt(request.getParameter("tnum"));
-		// System.out.println(tnum);
-		// String nickname = request.getParameter("nickname");
-		// Param param = new Param(tnum, nickname);
-		// mapper.scrap(param);
-		mapper.insertScrap(tnum);
-		
-//			int scrap = mapper.scrapCheck(nickname, tnum);
-//			if (scrap == 0) {
-//				mapper.insertScrap(tnum);
-//			} else if (scrap == 1) {
-//				mapper.scrapCancel(nickname, tnum);
-//			} 
+		String title = request.getParameter("title");
+		int lnum = Integer.parseInt(request.getParameter("lnum"));
+		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
+		hmap.put("usernum", usernum);
+		hmap.put("tnum", tnum);
+		int scrapfirst = mapper.scrapfirst(hmap);
+		Param param = new Param(tnum, lnum, usernum, title);
+		if (scrapfirst == 0) {
+			mapper.scrapInsert(param);
+			request.setAttribute("msg", "스크랩완료");
+			return "alert";
+		} else if (scrapfirst != 0) {
+			int scrap = mapper.scrap(hmap);
+			if (scrap == 0) {
+				mapper.scrapUpdate(hmap);
+				request.setAttribute("msg", "스크랩완료");
+				return "alert";
+			} else if (scrap > 0) {
+				mapper.scrapDelete(hmap);
+				request.setAttribute("msg", "스크랩취소");
+				return "alert";
+			}
+		}
 		return selectByTnum(request, model);
 	}
 	
 	@RequestMapping("/tlike")
-	public String tlike(HttpServletRequest request, Model model) {
+	public String tlike(HttpServletRequest request, Model model, HttpSession session) {
 		logger.info("HomeController 클래스의 tlike() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
 		
 		// 트렌드 좋아요
 		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		int lnum = Integer.parseInt(request.getParameter("lnum"));
+		int usernum = (int) session.getAttribute("usernum");
 		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
 		hmap.put("tnum", tnum);
 		hmap.put("lnum", lnum);
-		mapper.insertTrendLike(hmap);
-		
+		hmap.put("usernum", usernum);
+		hmap.put("tnum", tnum);
+		System.out.println("usernum: " + usernum);
+		int tlikefirst = mapper.tlikefirst(hmap);
+		System.out.println("tlikefirst: " + tlikefirst);
+		if (tlikefirst == 0) {
+			mapper.insertTrendLike(hmap);
+			mapper.tilkeInsert(hmap);
+		} else if (tlikefirst != 0) {
+			int tlike = mapper.tlike(hmap);
+			if (tlike == 0) {
+				mapper.insertTrendLike(hmap);
+				mapper.tlikeUpdate(hmap);
+			} else if (tlike > 0) {
+				mapper.deleteTrendLike(hmap);
+				mapper.tlikeDelete(hmap);
+			}
+		} 
 		return selectByTnum(request, model);
 	}
 	
 	@RequestMapping("/clike")
-	public String clike(HttpServletRequest request, Model model) {
+	public String clike(HttpServletRequest request, Model model, HttpSession session) {
 		logger.info("HomeController 클래스의 clike() 메소드 실행");
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
 		
 		// 댓글 좋아요
+		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		int cnum = Integer.parseInt(request.getParameter("cnum"));
 		int lcnum = Integer.parseInt(request.getParameter("lcnum"));
+		int usernum = (int) session.getAttribute("usernum");
 		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
 		hmap.put("cnum", cnum);
 		hmap.put("lcnum", lcnum);
-		mapper.insertCoLike(hmap);
-		
+		hmap.put("usernum", usernum);
+		System.out.println("usernum:" + usernum);
+		int clikefirst = mapper.clikefirst(hmap);
+		System.out.println("clikefirst: " + clikefirst);
+		if (clikefirst == 0) {
+			mapper.insertCoLike(hmap);
+			mapper.clikeInsert(hmap);
+		} else if (clikefirst != 0) {
+			int clike = mapper.clike(hmap);
+			if (clike == 0) {
+				mapper.insertCoLike(hmap);
+				mapper.clikeUpdate(hmap);
+			} else if (clike > 0) {
+				mapper.deleteCoLike(hmap);
+				mapper.clikeDelete(hmap);
+			}
+		}
+		model.addAttribute("tnum", tnum);
 		return selectByTnum(request, model);
 	}
 	
@@ -334,7 +517,7 @@ public class HomeController {
 		logger.info("HomeController 클래스의 baskinrobbins31() 메소드 실행");
 		return "baskinrobbins31";
 	}
-		
+	
 	//========================================= + 형빈 ====================================================
 	/* 닉네임 중복 체크 */
     @ResponseBody
@@ -349,71 +532,74 @@ public class HomeController {
     }
 
 
-    /* 아이디 중복 체크 */
-    @ResponseBody
-    @RequestMapping(value = "/IdCheck", method = RequestMethod.GET)
-    public int IdCheck(@RequestParam("userid") String userid)
-    {
-        /* ID가 있으면 1, 없으면 0 return */
-        MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
-        mapper.IdCheck(userid);
+	    /* 아이디 중복 체크 */
+	    @ResponseBody
+	    @RequestMapping(value = "/IdCheck", method = RequestMethod.GET)
+	    public int IdCheck(@RequestParam("userid") String userid)
+	    {
+	        /* ID가 있으면 1, 없으면 0 return */
+	        MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+	        mapper.IdCheck(userid);
 
-        return mapper.IdCheck(userid);
-    }
+	        return mapper.IdCheck(userid);
+	    }
 
 
-	/* 회원가입 Controller */
-	@ResponseBody
-	@RequestMapping(value = "/SignUpOk", method = RequestMethod.POST)
-	public void SignUpOk(@RequestParam(value = "nickname") String nickname,
-						 @RequestParam(value = "userid") String userid,
-						 @RequestParam(value = "pw") String pw,
-						 @RequestParam(value = "email") String email,
-						 @RequestParam(value = "birth", required = false) String birth) // 생년월일은 입력 안해도 무관하게 구성
-	{
-		// 필요한 요소만을 mapper에 넘겨주기 위한 HashMap
-		HashMap<String, String> map = new HashMap<>();
-
-		/* 가입 일자를 가져오기 위한 Date 생성 */
-		Date date = new Date();
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String dateStr = simpleDateFormat.format(date);
-
-		/* 회원가입에 필요한 요소를 map으로 묶기 */
-		map.put("nickname", nickname);
-		map.put("userid", userid);
-		map.put("pw", pw);
-		map.put("email", email);
-		map.put("birth", birth);
-		map.put("jdate",dateStr);
-
-		/* DB에 insert하는 구문 실행 */
-		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
-		mapper.SignUp(map);
-	}
-
-	/* 로그인 controller */
-	@ResponseBody
-	@RequestMapping(value = "/SignInOk", method = RequestMethod.POST)
-	public String SignInOk(@RequestParam(value = "userid") String userid,
-						   @RequestParam(value = "pw") String pw,
-						   HttpSession session)
-	{
-		// 필요한 요소만을 mapper에 넘겨주기 위한 HashMap
-		HashMap<String, String> map = new HashMap<>();
-		map.put("userid", userid);
-		map.put("pw", pw);
-
-		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
-		if ((mapper.IdCheck(userid) + mapper.PwCheck(map)) == 2)
+		/* 회원가입 Controller */
+		@ResponseBody
+		@RequestMapping(value = "/SignUpOk", method = RequestMethod.POST)
+		public void SignUpOk(@RequestParam(value = "nickname") String nickname,
+							 @RequestParam(value = "userid") String userid,
+							 @RequestParam(value = "pw") String pw,
+							 @RequestParam(value = "email") String email,
+							 @RequestParam(value = "birth", required = false) String birth) // 생년월일은 입력 안해도 무관하게 구성
 		{
-			UserVO result = mapper.SignIn(map);
-			session.setAttribute("nickname",result.getNickname());
-			session.setAttribute("usernum",result.getUsernum());
+			// 필요한 요소만을 mapper에 넘겨주기 위한 HashMap
+			HashMap<String, String> map = new HashMap<>();
 
-			return result.getNickname();
+			/* 가입 일자를 가져오기 위한 Date 생성 */
+			Date date = new Date();
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			String dateStr = simpleDateFormat.format(date);
+
+			/* 회원가입에 필요한 요소를 map으로 묶기 */
+			map.put("nickname", nickname);
+			map.put("userid", userid);
+			map.put("pw", pw);
+			map.put("email", email);
+			map.put("birth", birth);
+			map.put("jdate",dateStr);
+
+			/* DB에 insert하는 구문 실행 */
+			MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+			mapper.SignUp(map);
 		}
-		else if((mapper.IdCheck(userid) + mapper.PwCheck(map)) == 1)
+
+		/* 로그인 controller */
+		@ResponseBody
+		@RequestMapping(value = "/SignInOk", method = RequestMethod.POST)
+		public String SignInOk(@RequestParam(value = "userid") String userid,
+							   @RequestParam(value = "pw") String pw,
+							   HttpSession session)
+		{
+			// 필요한 요소만을 mapper에 넘겨주기 위한 HashMap
+			HashMap<String, String> map = new HashMap<>();
+			map.put("userid", userid);
+			map.put("pw", pw);
+
+			MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+			if ((mapper.IdCheck(userid) + mapper.PwCheck(map)) == 2)
+			{
+				UserVO result = mapper.SignIn(map);
+				session.setAttribute("nickname",result.getNickname());
+				session.setAttribute("usernum",result.getUsernum());
+				session.setAttribute("point",result.getPoint());
+
+				System.out.println(result.getPoint());
+
+				return result.getNickname();
+			}
+			else if((mapper.IdCheck(userid) + mapper.PwCheck(map)) == 1)
 		{
 			return "1";
 		}
@@ -434,12 +620,13 @@ public class HomeController {
 	@RequestMapping("/Myinfo")
 	public String Myinfo(Model model,HttpSession session, HttpServletResponse response) throws IOException
 	{
-		// 테스트의 편의성을 위해 로그인 확인 로직 주석처리
 		if (session.getAttribute("nickname") != null)
 		{
 			MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
 			UserVO uo = mapper.Myinfo((String) session.getAttribute("nickname"));
+			int commentCnt = mapper.commentCnt((String) session.getAttribute("nickname"));
 			model.addAttribute("uo",uo);
+			model.addAttribute("commentCnt",commentCnt);
 			return "Myinfo";
 		}
 		else
@@ -448,7 +635,45 @@ public class HomeController {
 			PrintWriter out = response.getWriter();
 			out.println("<script>alert('로그인 후 이용 가능합니다.');location.href='./list'</script>");
 			out.flush();
-			return "";
+			return "index";
+		}
+	}
+
+	@RequestMapping("/Scrap")
+	public String Scrap(HttpSession session, HttpServletResponse response, Model model) throws IOException {
+		if (session.getAttribute("nickname") != null)
+		{
+			MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
+			UserVO uo = mapper.Myinfo((String) session.getAttribute("nickname"));
+			model.addAttribute("uo",uo);
+			return "Scrap";
+		}
+		else
+		{
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>alert('로그인 후 이용 가능합니다.');location.href='./list'</script>");
+			out.flush();
+			return "index";
+		}
+	}
+
+	@RequestMapping("/MyComment")
+	public String MyComment(HttpSession session, HttpServletResponse response,HttpServletRequest request, Model model) throws IOException {
+		if (session.getAttribute("nickname") != null)
+		{
+			List<CommentVO> co = sqlSession.selectList("com.tjoeun.tag.dao.MybatisDAO.MyComment",session.getAttribute("nickname"));
+			model.addAttribute("co",co);
+			System.out.println(co);
+			return "MyComment";
+		}
+		else
+		{
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>alert('로그인 후 이용 가능합니다.');location.href='./list'</script>");
+			out.flush();
+			return "index";
 		}
 	}
 	

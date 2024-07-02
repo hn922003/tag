@@ -25,6 +25,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script type="text/javascript" src="./js/mainjs.js" defer="defer"></script>
     <script type="text/javascript" src="./js/list.js" defer="defer"></script>
+    <style>
+        table, th, td {border: 1px solid black;}
+    </style>
     <%--<link rel="stylesheet" href="./css/list.css" />--%>
 </head>
 <body>
@@ -126,12 +129,22 @@
 </div>
 
 <div>
-    닉네임: ${uo.nickname}<br>
-    이메일: ${uo.email}<br>
-    포인트: ${uo.point}<br>
-    가입일자: ${uo.jdate}<br>
-    내 댓글: ${commentCnt}개<br>
-    내 스크랩: <br>
+    <table>
+        <tr style="text-align: center">
+            <td>No</td>
+            <td>트렌드번호</td>
+            <td>내용</td>
+            <td>작성일자</td>
+        </tr>
+        <c:forEach var="comment" items="${co}" varStatus="status">
+            <tr style="text-align: center">
+                <td>${status.count}</td>
+                <td>${comment.tnum}</td>
+                <td>${comment.memo}</td>
+                <td><fmt:formatDate value="${comment.cdate}" pattern="yyyy-MM-dd"/></td>
+            </tr>
+        </c:forEach>
+    </table>
 </div>
 
 </body>

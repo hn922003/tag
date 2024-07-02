@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>목록보기</title>
+<title>게임리스트</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -26,7 +26,7 @@
 	<img class="logo" alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
 	
 	<div style="display: flex; justify-content: center; flex-grow: 1;">
-		<button type="button" class="btn btn-outline-dark" style="width: 50%;" onclick="location.href='./list2'"><i class="bi bi-list">Game</i></button>
+		<button type="button" class="btn btn-outline-dark" style="width: 50%;" onclick="location.href='list'"><i class="bi bi-list">Trend</i></button>
 	</div>
 	
 	<div id="searchbox" style="display: none;">
@@ -39,7 +39,7 @@
 	</div>
 	<div style="width: 10rem;">
 		<button type="button" class="btn btn-outline-dark" onclick="showsearchbox()"><i class="bi bi-search"></i></button>
-		<button type="button" class="btn btn-outline-dark" onclick="location.href='./list2'"><i class="bi bi-joystick"></i></button>
+		<button type="button" class="btn btn-outline-dark" onclick="location.href='./list'"><i class="bi bi-list"></i></button>
 		<button type="button" class="btn btn-outline-dark" onclick="showloginbox()"><i class="bi bi-person"></i></button>
 	</div>
 </div>
@@ -280,8 +280,59 @@
 		<!-- 콘텐츠 3개씩 보여주는 박스 -->
 		<div id="contents-boxes" class="container w-75">
 			<div id="contents-line-1" class="d-flex flex-wrap">
+				<!-- 게임은 무조건 출력 -->
+				<% 
+					String letters = "0123456789ABCDEF";
+					String colorcode = "#";
+					for (int i = 0; i < 6; i++){
+						colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
+					}
+					colorcode += "A8";
+				%>
+				<div class="cont text-center my-3 rounded-5 container-fluid position-relative" style="width: 30%; height: 25dvh; background-color: <%=colorcode %>">
+					<div class="container-fluid h-75 text-center align-middle">
+						<h2 class="title">업다운 게임</h2>			
+					</div>
+					<a class="stretched-link text-decoration-none text-black" href="./updown">
+						<span class="title fw-bold">숫자를 맞춰보세요</span><br/>
+					</a>
+				</div>
+				<% 
+					letters = "0123456789ABCDEF";
+					colorcode = "#";
+					for (int i = 0; i < 6; i++){
+						colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
+					}
+					colorcode += "A8";
+				%>
+				<div class="cont text-center my-3 rounded-5 container-fluid position-relative" style="width: 30%; height: 25dvh; background-color: <%=colorcode %>">
+					<div class="container-fluid h-75 text-center align-middle">
+						<h2 class="title">가위바위보 게임</h2>			
+					</div>
+					<a class="stretched-link text-decoration-none text-black" href="./game1">
+						<span class="title fw-bold">컴퓨터를 이겨보세요!</span><br/>
+					</a>
+				</div>
+				<% 
+					letters = "0123456789ABCDEF";
+					colorcode = "#";
+					for (int i = 0; i < 6; i++){
+						colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
+					}
+					colorcode += "A8";
+				%>
+				<div class="cont text-center my-3 rounded-5 container-fluid position-relative" style="width: 30%; height: 25dvh; background-color: <%=colorcode %>">
+					<div class="container-fluid h-75 text-center align-middle">
+						<h2 class="title">숫자야구 게임</h2>			
+					</div>
+					<a class="stretched-link text-decoration-none text-black" href="./numbaseball">
+						<span class="title fw-bold">레벨별로 도전하세요!</span><br/>
+					</a>
+				</div>
+	
 				<!-- 리스트 변수 설정 -->
 				<c:set var="list" value="${trendList.list}"/>
+				
 				<!-- 리스트가 없으면 없다고 출력(쓸일 없겠지만) -->
 				<c:if test="${list.size() == 0}">
 		 			<div class="table-danger">
@@ -297,8 +348,8 @@
 		 			<c:forEach var="vo" items="${list}" varStatus="view">
 		 			<!-- 매 콘텐츠 마다 반복해서 랜덤 컬러 설정 -->
 		 			<% 
-						String letters = "0123456789ABCDEF";
-						String colorcode = "#";
+						letters = "0123456789ABCDEF";
+						colorcode = "#";
 						for (int i = 0; i < 6; i++){
 							colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
 						}

@@ -59,6 +59,7 @@
     String point = String.valueOf(session.getAttribute("point"));
 %>
 
+<%-- 로그인 박스 --%>
 <div id="loginbox"
      style="position: absolute;
 			top: 6.5rem;
@@ -130,7 +131,7 @@
     이메일: ${uo.email}<br>
     포인트: ${uo.point}<br>
     가입일자: ${uo.jdate}<br>
-    내 댓글: ${commentCnt}개<br>
+    내 댓글: <br>
     내 스크랩: <br>
 </div>
 

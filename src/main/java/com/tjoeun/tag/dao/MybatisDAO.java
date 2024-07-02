@@ -29,20 +29,43 @@ public interface MybatisDAO {
 
 	void deleteComment(int cnum);
 
-	void report(HashMap<String, Integer> hmap);
+	// 신고
+	int reportfirst(HashMap<String, Integer> hmap);
+	void insertTrendReport(HashMap<String, Integer> hmap);
+	void reportInsert(HashMap<String, Integer> hmap);
+	int report(HashMap<String, Integer> hmap);
+	void reportUpdate(HashMap<String, Integer> hmap);
 
-	// void scrap(Param param);
-	void insertScrap(int tnum);
+	// 스크랩
+	int scrapfirst(HashMap<String, Integer> hmap);
+	void scrapInsert(Param param);
+	int scrap(HashMap<String, Integer> hmap);
+	void scrapUpdate(HashMap<String, Integer> hmap);
+	void scrapDelete(HashMap<String, Integer> hmap);
 
+	// 좋아요
+	int tlikefirst(HashMap<String, Integer> hmap);
 	void insertTrendLike(HashMap<String, Integer> hmap);
-
+	void tilkeInsert(HashMap<String, Integer> hmap);
+	int tlike(HashMap<String, Integer> hmap);
+	void tlikeUpdate(HashMap<String, Integer> hmap);
+	void deleteTrendLike(HashMap<String, Integer> hmap);
+	void tlikeDelete(HashMap<String, Integer> hmap);
+	
+	// 댓글 좋아요
+	int clikefirst(HashMap<String, Integer> hmap);
 	void insertCoLike(HashMap<String, Integer> hmap);
+	void clikeInsert(HashMap<String, Integer> hmap);
+	int clike(HashMap<String, Integer> hmap);
+	void clikeUpdate(HashMap<String, Integer> hmap);
+	void deleteCoLike(HashMap<String, Integer> hmap);
+	void clikeDelete(HashMap<String, Integer> hmap);
 
 	ArrayList<CommentVO> selectCommentListCnum(int cnum);
 
 	void updateComment(Param param);
 
-	
+
 	//======================================== +건희 ===========================================
 	int contentCount();
 	ArrayList<TrendVO> contentList();
@@ -61,4 +84,33 @@ public interface MybatisDAO {
 	UserVO SignIn(HashMap<String, String> vo);
 
 	UserVO Myinfo(String nickname);
+
+	ArrayList<CommentVO> MyComment(String nickname);
+
+	int commentCnt(String nickname);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

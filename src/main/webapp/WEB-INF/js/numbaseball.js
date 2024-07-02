@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const retryBtn = document.getElementById("retryBtn");
 	 
 	let answer = generateRandomNumber();
-	result.innerText = `정답: ${answer}`;
+	//result.innerText = `정답: ${answer}`;
 	let attempts = [];
 	const maxAttempts = 10;
 	
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
         gameContainer.style.display = "block"; // 게임 요소를 표시
         levelBtn.disabled = true; // 레벨 버튼을 비활성화
         levelInput.disabled = true; // 레벨 입력 필드를 비활성화
-        result.innerText = `정답: ${answer}`;  // 정답을 화면에 표시
+        //result.innerText = `정답: ${answer}`;  // 정답을 화면에 표시
     });
 	
 	// 경고 메시지
@@ -62,18 +62,22 @@ document.addEventListener("DOMContentLoaded", function () {
             result.innerText = "축하합니다! " +  attempts.length + "번 만에 맞추셨습니다!";
             guessBtn.disabled = true;
             retryBtn.style.display = "inline-block";
-        } 
-
-        if (attempts.length >= maxAttempts && feedback.strikes !== level) {
-            alert("기회가 모두 소진되었습니다. 정답은 " + answer + "였습니다.");
-            guessBtn.disabled = true;
+        } else if (attempts.length >= maxAttempts && feedback.strikes !== level) {
+        	result.innerText = "기회가 모두 소진되었습니다. 정답은 " + answer + "였습니다.";
+        	guessBtn.disabled = true;
             retryBtn.style.display = "inline-block";
         }
+
+        // if (attempts.length >= maxAttempts && feedback.strikes !== level) {
+            // alert("기회가 모두 소진되었습니다. 정답은 " + answer + "였습니다.");
+            // guessBtn.disabled = true;
+            // retryBtn.style.display = "inline-block";
+        // }
 
         userInput.value = '';
 	});
 	 
-	 retryBtn.addEventListener("click", function () {
+	retryBtn.addEventListener("click", function () {
         // 게임 초기화
         levelInput.disabled = false;
         levelBtn.disabled = false;

@@ -11,16 +11,8 @@ function clip() {
 	alert('URL이 복사되었습니다.')
 }
 
-function reportbtn() {
-	var rnum = document.getElementById("rnum").value
-	var cnum = document.getElementById("cnum").value
-	var tnum = document.getElementById("tnum").value
-	if (confirm('신고하시겠습니까?')) {
-		alert('신고접수완료')
-		location.href = 'report?rnum=' + rnum + '&cnum=' + cnum + '&tnum=' + tnum
-	} else {
-		alert('신고접수취소')
-	}
+function like() {
+	alert('로그인 후 이용해주세요.');
 }
 
 function morebtn() {
