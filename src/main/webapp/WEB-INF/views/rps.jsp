@@ -6,42 +6,75 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>목록보기</title>
+<title>rock-paper-scissor</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
+<style type="text/css">
+	
+	html { 
+		font-size: 16px; 
+	}
+	
+	.header {
+		height: 10rem;
+		min-width: 60rem;
+	}
+	
+	.logo {
+		transition: 0.25s;
+	}
+	
+	.logo:hover {
+		box-shadow: 0px 0px 1em white, 0.5em 0.5em rgba(0,0,0,0.3);
+	}
+	
+	.res {
+	 	font-family: "Anton", sans-serif;
+	 	font-weight: 400;
+	 	font-style: normal;
+	}
+	
+	.card {
+		width: 256px;
+		border-radius: 10px;
+	}
+	
+	.btn_me:hover {
+		border: 1px solid #5555FF !important;
+	}
+	
+	.btn_me:active,
+	.btn_me:focus {
+		border: 1px solid blue !important;
+	}
+	
+</style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript" src="./js/list.js" defer="defer"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script type="text/javascript" src="./js/mainjs.js" defer="defer"></script>
-<script type="text/javascript" src="./js/Account.js" defer="defer"></script>
-<link rel="stylesheet" href="./css/list.css" />
+<script type="text/javascript" src="./js/rps.js" defer="defer"></script>
 </head>
+
 <body>
 <fmt:requestEncoding value="UTF-8"/>
-<!-- 콘텐츠 헤더 부분 -->
 <div class="header" style="display: flex; align-items: center; justify-content: space-around; width: 100%;">
 	<img class="logo" alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
 	
 	<div style="display: flex; justify-content: center; flex-grow: 1;">
-		<button type="button" class="btn btn-outline-dark" style="width: 35%;" onclick="location.href='index'"><i class="bi bi-house">Index</i></button>
-		<button type="button" class="btn btn-outline-dark" style="width: 35%;" onclick="location.href='list2'"><i class="bi bi-joystick">Games</i></button>
+		<button type="button" class="btn btn-outline-dark" style="width: 25%;" onclick="location.href='index'"><i class="bi bi-house">Index</i></button>
+		<button type="button" class="btn btn-outline-dark" style="width: 25%;" onclick="location.href='list'"><i class="bi bi-list">Trend</i></button>
+		<button type="button" class="btn btn-outline-dark" style="width: 25%;" onclick="location.href='list2'"><i class="bi bi-joystick">Games</i></button>
 	</div>
 	
-	<div id="searchbox" style="display: none;">
-		<form id="search" action="search" method="post">
-			<div style="display: flex;">
-				<input type="text" class="form-control" style="width: 10rem;" name="searchval" maxlength="10" placeholder="Search">
-				<button type="submit"
-					style="-webkit-backdrop-filter: invert(100%);
-					backdrop-filter: invert(100%);"
-					class="btn btn-outline-light">Search</button>
-			</div>
-		</form>
-	</div>
-	<div style="width: 7.5rem;">
-		<button type="button" class="btn btn-outline-dark" onclick="showsearchbox()"><i class="bi bi-search"></i></button>
+	<div style="width: 5rem;">
 		<button type="button" class="btn btn-outline-dark" onclick="showloginbox()"><i class="bi bi-person"></i></button>
 	</div>
 </div>
@@ -52,6 +85,7 @@
 	String nickname = (String) session.getAttribute("nickname");
 	String point = String.valueOf(session.getAttribute("point"));
 %>
+
 
 <!-- 로그인, 회원가입, 마이페이지 박스 -->
 <div id="loginbox" style="position: absolute;
@@ -70,7 +104,7 @@
 			<button class="btn btn-outline-dark" id="tab-login" onclick="pills_login()"> SignIn </button>
 			<button class="btn btn-outline-dark" id="tab-register" onclick="pills_register()" style="margin-left: 3%; margin-right: 43%"> SignUp </button>
 
-			<%-- 창 닫기 버튼 --%>
+				<%-- 창 닫기 버튼 --%>
 			<div style="width: 10%;">
 				<button type="button" class="btn-close" aria-label="Close" onclick="pills_close()"></button>
 			</div>
@@ -80,7 +114,7 @@
 			<div id="pills-login" style="width: 20rem; display: block;">
 				<form>
 					<!-- ID input -->
-					<%-- 수정 - type="email"에서 type="text"로 변경 및 id 변경--%>
+						<%-- 수정 - type="email"에서 type="text"로 변경 및 id 변경--%>
 					<div data-mdb-input-init class="form-outline mb-4">
 						<input type="text" id="loginId" class="form-control" placeholder="Username"/>
 					</div>
@@ -107,7 +141,7 @@
 					</div>
 
 					<!-- Submit button -->
-					<%-- 수정 - onclick 이벤트 추가 --%>
+						<%-- 수정 - onclick 이벤트 추가 --%>
 					<button type="button" style="width: 100%;" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block mb-4" onclick="SignInOk()">Login</button>
 
 					<div class="text-center mb-4">
@@ -156,7 +190,7 @@
 					</div>
 
 					<div class="text-center mb-2">or:</div>
-					<%-- 수정 - 회원가입 폼 --%>
+						<%-- 수정 - 회원가입 폼 --%>
 					<!-- 닉네임 입력 -->
 					<div data-mdb-input-init class="form-outline mb-4">
 						<input type="text" id="nickname" class="form-control" placeholder="Nickname" oninput="NickCheck()"/>
@@ -194,7 +228,8 @@
 
 					<!-- Checkbox -->
 					<div class="form-check d-flex justify-content-center mb-4">
-						<input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked aria-describedby="registerCheckHelpText"/>
+						<input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
+							   aria-describedby="registerCheckHelpText"/>
 						<label class="form-check-label" for="registerCheck">
 							I have read and agree to the terms
 						</label>
@@ -211,7 +246,8 @@
 	<c:if test="<%=nickname != null %>">
 		<%-- 로그인 / 회원가입 / 프로필 버튼 --%>
 		<div class="d-flex justify-content-right align-items-right form-outline mb-2">
-			<%-- 창 닫기 버튼 --%>
+
+				<%-- 창 닫기 버튼 --%>
 			<div style="width: 10%;">
 				<button type="button" class="btn-close" aria-label="Close" onclick="pills_close()"></button>
 			</div>
@@ -233,125 +269,71 @@
 					</div>
 				</div>
 				<div data-mdb-input-init class="form-outline mb-4">
-	                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="window.open('./Myinfo','userinfo','width=500, height=400,scrollbars=no, resizable=no, toolbars=no, menubar=no')">
-	                    내 정보
-	                </button>
-	            </div>
-	
-	            <div data-mdb-input-init class="form-outline mb-4">
-	                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyScrap'">
-	                    스크랩
-	                </button>
-	            </div>
-	
-	            <div data-mdb-input-init class="form-outline mb-4">
-	                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyComment'">
-	                    내 댓글
-	                </button>
-	            </div>
-	
-	            <div data-mdb-input-init class="form-outline mb-4">
-	                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./list2'">
-	                    Game
-	                </button>
-	            </div>
-	
-	            <div data-mdb-input-init class="form-outline mb-4">
-	                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%; color: red" onclick="location.href='./logout'">
-	                    Logout
-	                </button>
-	            </div>
+					<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./Myinfo'">
+						내 정보
+					</button>
+				</div>
+
+				<div data-mdb-input-init class="form-outline mb-4">
+					<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./Scrap'">
+						스크랩
+					</button>
+				</div>
+
+				<div data-mdb-input-init class="form-outline mb-4">
+					<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyComment'">
+						내 댓글
+					</button>
+				</div>
+
+				<div data-mdb-input-init class="form-outline mb-4">
+					<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;">
+						Game
+					</button>
+				</div>
+
+				<div data-mdb-input-init class="form-outline mb-4">
+					<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%; color: red" onclick="location.href='./logout'">
+						Logout
+					</button>
+				</div>
 			</div>
 		</div>
 	</c:if>
 </div>
 
-<c:if test="${searchNum == 0}">
-	<div style="width: 100%; text-align: center;">
-		<span class="title">검색 결과가 없습니다</span>
+
+	<div id="com" style="display: flex; justify-content: center; background-color: #FAC8B5">
+		<button class="btn" style="opacity: 0.1">가위<img class="card" alt="가위" src="./images/scissors.jpeg"></button>
+		<button class="btn" style="opacity: 0.1">바위<img class="card" alt="바위" src="./images/rock.jpeg"></button>
+		<button class="btn" style="opacity: 0.1">보<img class="card" alt="보" src="./images/paper.jpeg"></button>
 	</div>
-</c:if>
-
-<!-- 메인 -->
-<main id="main-wrapper" class="container-fluid">
-   <div id="main" class="container-fluid w-75 d-flex">
-      <!-- 콘텐츠 3개씩 보여주는 박스 -->
-      <div id="contents-boxes" class="container w-75">
-         <div id="contents-line-1" class="d-flex flex-wrap">
-            <!-- 리스트 변수 설정 -->
-            <c:set var="list" value="${trendList.list}"/>
-            <!-- 리스트가 없으면 없다고 출력(쓸일 없겠지만) -->
-            <c:if test="${list.size() == 0}">
-                <div class="table-danger">
-                   <div>
-                      <marquee>트렌드 컨텐츠가 없습니다.</marquee>
-                   </div>
-                </div>
-             </c:if>
-            
-             <!-- 리스트가 있으면 리스트 만큼 반복해서 출력 -->
-             <c:if test="${list.size() != 0}">
-                <!-- 리스트의 아이템 1건을 vo 변수로 설정 / 상태 변수를 view -->
-                <c:forEach var="vo" items="${list}" varStatus="view">
-                <!-- 매 콘텐츠 마다 반복해서 랜덤 컬러 설정 -->
-                <% 
-                  String letters = "0123456789ABCDEF";
-                  String colorcode = "#";
-                  for (int i = 0; i < 6; i++){
-                     colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
-                  }
-                  colorcode += "A8";
-               %>
-                <!-- 인덱스 0~8 (9개) 보이게 model로 넘어온 viewcount 활용 -->
-                <c:if test="${view.index < 9}">
-                <div class="cont text-center my-3 rounded-5 container-fluid position-relative" 
-                   style="width: 30%; min-width: 300px; height: 25dvh; min-height: 200px; background-color: <%=colorcode %>">
-                  <a class="stretched-link text-decoration-none text-black" href="./selectByTnum?tnum=${vo.tnum}">
-                     <span class="title ttext1">${vo.title}</span><br/>
-                  </a>
-                  <span class="fw-bold"><i class="bi bi-heart-fill" style="color: red;"></i>&nbsp;${vo.lnum}</span><br/>   
-               </div>
-                </c:if>
-                <!-- 인덱스 9 이상 안 보이게 하기 -->
-                <c:if test="${view.index >= 9}">
-                <div class="trc cont text-center my-3 rounded-5 container-fluid position-relative" 
-                   style="width: 30%; min-width: 300px; height: 25dvh; min-height: 200px; display: none; background-color: <%=colorcode %>">
-                  <a class="stretched-link text-decoration-none text-black" href="./selectByTnum?tnum=${vo.tnum}">
-                     <span class="title ttext1">${vo.title}</span><br/>
-                  </a>
-                  <span class="fw-bold"><i class="bi bi-heart-fill" style="color: red;"></i>&nbsp;${vo.lnum}</span><br/>
-               </div>
-                </c:if>
-                </c:forEach>
-             </c:if><!-- 리스트 출력 끝 -->
-         </div>
-         <div id="morediv" class="container text-center align-items-center my-3">
-            <button id="morebtn"
-            class="btn btn-danger" 
-            type="button" 
-            title="콘텐츠 6개 더보기"
-            onclick="setViewcount()">더보기 <i class="bi bi-chevron-down"></i></button>
-            <!-- 더보기 변수 -->
-            <input id="morecount" value=0 type="hidden"/><!-- 더보기 시작번호 -->
-            <input id="last" value="${trendList.totalCount}" type="hidden"/><!-- 모든 글 수 -->
-         </div>
-      </div>
-
-   </div>
-   
-   <!-- 최상단으로 올려주는 top 버튼을 만들어준다. -->
-   <a id="toTop" class="position-fixed bottom-0 end-0 m-5" href="#" style="display:none;">
-      <i class="bi bi-arrow-up-circle-fill fs-1 text-white"></i>
-   </a >
-</main>
-				
-
-
-<!-- 풋터 -->
-<footer id="footer-wrapper" class="container-fluid bg-dark">
-	<div id="footer" class="container-fluid text-center text-white">
-		&copy; Copywrite Team TAG
+	
+	<div class="res" style="text-align: center; vertical-align: middle; width: 100%; height: 2em; background-color: #FD7979;">CPU WIN : <span id="comScore">0</span></div>
+	<div class="res" style="display: flex; justify-content: center; width: 100%; height: 6em; background-color: #CDCDCD;">
+		<div style="width: 22.5em;">
+			[POINTS]<br/>
+			당신이 얻을 수 있는 포인트 : <span id="point">0</span><br/>
+			※ 계산법 : (YOU WIN - CPU WIN) * 최고 기록
+		</div>
+		<div style="width: 15em;">
+			[RECORD]<br/>
+			<span id="tryScore">0</span>번째 결과 : <span id="res"></span><br/>
+			최고 기록 : <span id="winsrec">0</span>연승<br/>
+			현재 기록 : <span id="wins">0</span>연승<br/>
+		</div>
+		<div style="overflow: auto; width: 15em;">
+			[HISTORY]<br/>
+			<span id="result"></span>
+		</div>
 	</div>
-</footer>
+	<div class="res" style="text-align: center; vertical-align: middle; width: 100%; height: 2em; background-color: #7979FD;">YOU WIN : <span id="myScore">0</span></div>
+	
+	<div id="me" style="display: flex; justify-content: center; background-color: #B5C8FA;">
+		<button class="btn btn_me" onclick="select('가위')">가위<img class="card" alt="가위" src="./images/scissors.jpeg"></button>
+		<button class="btn btn_me" onclick="select('바위')">바위<img class="card" alt="바위" src="./images/rock.jpeg"></button>
+		<button class="btn btn_me" onclick="select('보')">보<img class="card" alt="보" src="./images/paper.jpeg"></button>
+	</div>
+	
 </body>
 </html>

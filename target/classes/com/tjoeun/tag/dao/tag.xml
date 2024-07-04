@@ -98,8 +98,8 @@
 	<!-- scrap insert -->
 	<insert id="scrapInsert" parameterType="com.tjoeun.tag.vo.Param">
 		<!-- insert into scrap (snum, tnum) values ((select nvl(max(snum), 0) + 1 from scrap), #{tnum}) -->
-		insert into mypage (idx, tnum, lnum, usernum, title, scrap) 
-		values ((select nvl(max(idx), 0) + 1 from mypage), #{tnum}, #{lnum}, #{usernum}, #{title}, 1)
+		insert into mypage (idx, tnum, lnum, usernum, title, scrap, writer) 
+		values ((select nvl(max(idx), 0) + 1 from mypage), #{tnum}, #{lnum}, #{usernum}, #{title}, 1, #{writer})
 	</insert>
 	
 	<!-- 이전에 스크랩 눌렀는지 확인 -->
@@ -259,15 +259,21 @@
 		select * from USERINFO where NICKNAME=#{nickname}
 	</select>
 	
-	<select id="MyComment" parameterType="java.lang.String" resultType="co">
-		select * from TCOMMENT where NICKNAME=#{nickname} order by CDATE desc
+	<select id="MyComment" parameterType="java.lang.Integer" resultType="mcvo">
+		select * from TCOMMENT left join TREND on TCOMMENT.TNUM = TREND.TNUM where TCOMMENT.USERNUM=#{usernum} order by CDATE desc
 	</select>
-
+	
 	<select id="commentCnt" parameterType="java.lang.String" resultType="int">
 		select count(*) from TCOMMENT where NICKNAME=#{nickname}
 	</select>
 
-	
+	<select id="MyScrap" parameterType="java.lang.Integer" resultType="vo">
+		select * from MYPAGE where USERNUM=#{usernum} and SCRAP=1
+	</select>
+
+	<select id="scrapCnt" parameterType="java.lang.Integer" resultType="int">
+		select count(*) from MYPAGE where USERNUM=#{usernum} and SCRAP=1
+	</select>
 </mapper>
 
 

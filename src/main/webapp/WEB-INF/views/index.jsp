@@ -61,6 +61,7 @@
     	box-shadow: 0px 0px 0em white, 0.5em 0.5em rgba(0,0,0,0.3);
     	word-wrap: break-word;
     	transition: 0.25s;
+    	cursor: pointer;
 	}
 	
 	.cont:hover {
@@ -139,46 +140,44 @@
 	
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-	rel="stylesheet">
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script type="text/javascript" src="./js/mainjs.js" defer="defer"></script>
 <script type="text/javascript" src="./js/Account.js" defer="defer" charset="UTF-8"></script>
 </head>
 <body>
-	<!-- 헤더 영역 -->
-	<div class="header" style="display: flex; align-items: center; justify-content: space-around; width: 100%;">
+<!-- 헤더 영역 -->
+<div class="header" style="display: flex; align-items: center; justify-content: space-around; width: 100%;">
 	<img class="logo" alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
 	<div style="display: flex; justify-content: center; flex-grow: 1;">
-		<button type="button" class="btn btn-outline-dark" style="width: 50%;" onclick="location.href='list'"><i class="bi bi-list">List</i></button>
+		<button type="button" class="btn btn-outline-dark" style="width: 35%;" onclick="location.href='list'"><i class="bi bi-list">Trend</i></button>
+		<button type="button" class="btn btn-outline-dark" style="width: 35%;" onclick="location.href='list2'"><i class="bi bi-joystick">Games</i></button>
 	</div>
 	
 	<div id="searchbox" style="display: none;">
 		<form id="search" action="search" method="post">
 			<div style="display: flex;">
-				<input type="text" class="form-control" name="searchval" maxlength="10" placeholder="Search">
-				<button type="submit" class="btn btn-outline-light">Search</button>
+				<input type="text" class="form-control" style="width: 10rem;" name="searchval" maxlength="10" placeholder="Search">
+				<button type="submit"
+					style="-webkit-backdrop-filter: invert(100%); backdrop-filter: invert(100%);"
+					class="btn btn-outline-light">Search</button>
 			</div>
 		</form>
 	</div>
-	<div style="width: 10rem;">
+	<div style="width: 7.5rem;">
 		<button type="button" class="btn btn-outline-dark" onclick="showsearchbox()"><i class="bi bi-search"></i></button>
-		<button type="button" class="btn btn-outline-dark" onclick="location.href='./list2'"><i class="bi bi-joystick"></i></button>
 		<button type="button" class="btn btn-outline-dark" onclick="showloginbox()"><i class="bi bi-person"></i></button>
 	</div>
 </div>
 
 	<%-- 세션 정보 받아오기 --%>
 	<%
+		request.setCharacterEncoding("utf-8");
 		session = request.getSession();
 		String nickname = (String) session.getAttribute("nickname");
 		String point = String.valueOf(session.getAttribute("point"));
 	%>
-
 
 	<!-- 로그인, 회원가입, 마이페이지 박스 -->
 	<div id="loginbox" style="position: absolute;
@@ -205,62 +204,62 @@
 
 			<div class="tab-content">
 				<div id="pills-login" style="width: 20rem; display: block;">
-				<form>
-					<!-- ID input -->
-					<%-- 수정 - type="email"에서 type="text"로 변경 및 id 변경--%>
-					<div data-mdb-input-init class="form-outline mb-4">
-						<input type="text" id="loginId" class="form-control" placeholder="Username"/>
-					</div>
-
-					<!-- Password input -->
-					<div data-mdb-input-init class="form-outline mb-4">
-						<input type="password" id="loginPassword" class="form-control" placeholder="Password"/>
-					</div>
-
-					<!-- 2 column grid layout -->
-					<div class="row mb-4">
-						<div class="col-md-6 d-flex justify-content-center">
-							<!-- Checkbox -->
-							<div class="mb-3 mb-md-0">
-								<input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
-								<label class="form-check-label" for="loginCheck"> Remember me </label>
+					<form>
+						<!-- ID input -->
+						<%-- 수정 - type="email"에서 type="text"로 변경 및 id 변경--%>
+						<div data-mdb-input-init class="form-outline mb-4">
+							<input type="text" id="loginId" class="form-control" placeholder="Username"/>
+						</div>
+	
+						<!-- Password input -->
+						<div data-mdb-input-init class="form-outline mb-4">
+							<input type="password" id="loginPassword" class="form-control" placeholder="Password"/>
+						</div>
+	
+						<!-- 2 column grid layout -->
+						<div class="row mb-4">
+							<div class="col-md-6 d-flex justify-content-center">
+								<!-- Checkbox -->
+								<div class="mb-3 mb-md-0">
+									<input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
+									<label class="form-check-label" for="loginCheck"> Remember me </label>
+								</div>
+							</div>
+	
+							<div class="col-md-6 d-flex justify-content-center">
+								<!-- Simple link -->
+								<a href="#!">Forgot password?</a>
 							</div>
 						</div>
-
-						<div class="col-md-6 d-flex justify-content-center">
-							<!-- Simple link -->
-							<a href="#!">Forgot password?</a>
+	
+						<!-- Submit button -->
+						<%-- 수정 - onclick 이벤트 추가 --%>
+						<button type="button" style="width: 100%;" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block mb-4" onclick="SignInOk()">Login</button>
+	
+						<div class="text-center mb-4">
+							<button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark btn-floating mx-1">
+								<i class="bi bi-google"></i>
+							</button>
+	
+							<button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark btn-floating mx-1">
+								<i class="bi bi-twitter"></i>
+							</button>
+	
+							<button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark btn-floating mx-1">
+								<i class="bi bi-facebook"></i>
+							</button>
+	
+							<button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark btn-floating mx-1">
+								<i class="bi bi-github"></i>
+							</button>
 						</div>
-					</div>
-
-					<!-- Submit button -->
-					<%-- 수정 - onclick 이벤트 추가 --%>
-					<button type="button" style="width: 100%;" data-mdb-button-init data-mdb-ripple-init class="btn btn-dark btn-block mb-4" onclick="SignInOk()">Login</button>
-
-					<div class="text-center mb-4">
-						<button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark btn-floating mx-1">
-							<i class="bi bi-google"></i>
-						</button>
-
-						<button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark btn-floating mx-1">
-							<i class="bi bi-twitter"></i>
-						</button>
-
-						<button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark btn-floating mx-1">
-							<i class="bi bi-facebook"></i>
-						</button>
-
-						<button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-dark btn-floating mx-1">
-							<i class="bi bi-github"></i>
-						</button>
-					</div>
-
-					<!-- Register buttons -->
-					<div class="text-center">
-						<p>Not a member? <a href="#!">Register</a></p>
-					</div>
-				</form>
-			</div>
+	
+						<!-- Register buttons -->
+						<div class="text-center">
+							<p>Not a member? <a href="#!">Register</a></p>
+						</div>
+					</form>
+				</div>
 				<div id="pills-register" style="width: 20rem; display: none;">
 					<form>
 						<div class="text-center mb-2">
@@ -339,8 +338,7 @@
 		<c:if test="<%=nickname != null %>">
 			<%-- 로그인 / 회원가입 / 프로필 버튼 --%>
 			<div class="d-flex justify-content-right align-items-right form-outline mb-2">
-
-			<%-- 창 닫기 버튼 --%>
+				<%-- 창 닫기 버튼 --%>
 				<div style="width: 10%;">
 					<button type="button" class="btn-close" aria-label="Close" onclick="pills_close()"></button>
 				</div>
@@ -362,50 +360,53 @@
 						</div>
 					</div>
 					<div data-mdb-input-init class="form-outline mb-4">
-						<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./Myinfo'">
-							내 정보
-						</button>
-					</div>
-
-					<div data-mdb-input-init class="form-outline mb-4">
-						<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./Scrap'">
-							스크랩
-						</button>
-					</div>
-
-					<div data-mdb-input-init class="form-outline mb-4">
-						<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyComment'">
-							내 댓글
-						</button>
-					</div>
-
-					<div data-mdb-input-init class="form-outline mb-4">
-						<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;">
-							Game
-						</button>
-					</div>
-
-					<div data-mdb-input-init class="form-outline mb-4">
-						<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%; color: red" onclick="location.href='./logout'">
-							Logout
-						</button>
-					</div>
+		                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="window.open('./Myinfo','userinfo','width=500, height=400,scrollbars=no, resizable=no, toolbars=no, menubar=no')">
+		                    내 정보
+		                </button>
+		            </div>
+		
+		            <div data-mdb-input-init class="form-outline mb-4">
+		                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyScrap'">
+		                    스크랩
+		                </button>
+		            </div>
+		
+		            <div data-mdb-input-init class="form-outline mb-4">
+		                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyComment'">
+		                    내 댓글
+		                </button>
+		            </div>
+		
+		            <div data-mdb-input-init class="form-outline mb-4">
+		                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./list2'">
+		                    Game
+		                </button>
+		            </div>
+		
+		            <div data-mdb-input-init class="form-outline mb-4">
+		                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%; color: red" onclick="location.href='./logout'">
+		                    Logout
+		                </button>
+		            </div>
 				</div>
 			</div>
 		</c:if>
 	</div>
 
 
-<c:if test="${searchNum == 0}">
+<!-- DB Trend list -->
+<c:set var="trendlist" value="${trendList.list}"/>
+
+<!-- 컨텐츠가 없을 경우 -->
+<c:if test="${trendlist.size() == 0}">
 	<div style="width: 100%; text-align: center;">
-		<span class="title">검색 결과가 없습니다</span>
+		<span class="title">컨텐츠가 없습니다</span>
 	</div>
 </c:if>
 
+	
 <!-- 컨텐츠 목록 부분 -->
 <div class="container-fluid" style="display: flex; justify-content: center;">
-	<!-- DB Trend list -->
-	<c:set var="trendlist" value="${trendList.list}"/>
 	
 	<!-- 컨텐츠 왼쪽 영역(왼쪽 3개 박스) -->
 	<div style="display: grid;
@@ -576,10 +577,7 @@
 				<span class="ttext ttext1">${trend.maintext}</span>
 			</div>
 		</c:forEach>
-		
 	</div>
-
 </div>
-
 </body>
 </html>

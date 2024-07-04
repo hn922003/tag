@@ -23,6 +23,7 @@
 			location.href = history.go(-1);
 		} else {
 			alert('신고접수 취소');
+			location.href = history.go(-1);
 		}
 	} else if (msg == '스크랩완료') {
 		alert(msg);

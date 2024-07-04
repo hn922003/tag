@@ -1,20 +1,22 @@
 let tryScore = 0
 let myScore = 0
 let comScore = 0
+let wins = 0
+let winsrec = 0
 
 $(() => {
-	$('.btn_me').click(() => {
-		$(this).css('color', 'red')
-		console.log($(this))
-	})
+
 })
 
 
 function select(num) {
 	
-	
 	let me = num
 	let com = Math.floor(Math.random() * 3)
+	
+	if (me === '가위') me = 2;
+	else if (me === '바위') me = 0;
+	else if (me === '보') me = 1;
 	
 	if(com === 0){
 		$('#com').html(`
@@ -40,17 +42,41 @@ function select(num) {
 	$('#tryScore').text(tryScore)
 	if(me === com){
 		let result = 'Draw'
-		$('#result').append(result + '<br/>')
+		
+		$('#res').text(result)
+		$('#result').prepend(tryScore + '. ' + num + ' ' + result + ' ' + num + '<br/>')
 	} else if((me === 2 && com === 1) || (me === 1 && com === 0) || (me === 0 && com === 2)){
 		let result = 'Win'
 		myScore += 1
-		$('#result').append(result + '<br/>')
+		
+		if (com === 0) com = '바위'
+		else if (com === 1) com = '보'
+		else if (com === 2) com = '가위'
+		
+		wins += 1
+		$('#wins').text(wins)
+		if (winsrec < wins) {
+			winsrec = wins
+			$('#winsrec').text(winsrec)
+		}
+		
+		$('#res').text(result)
+		$('#result').prepend(tryScore + '. ' + num + ' ' + result + ' ' + com + '<br/>')
 		$('#myScore').text(myScore)
 	} else {
 		let result = 'Lose'
 		comScore += 1
-		$('#result').append(result + '<br/>')
+		wins = 0
+		
+		if (com === 0) com = '바위'
+		else if (com === 1) com = '보'
+		else if (com === 2) com = '가위'
+		
+		$('#wins').text(wins)
+		$('#res').text(result)
+		$('#result').prepend(tryScore + '. ' + num + ' ' + result + ' ' + com + '<br/>')
 		$('#comScore').text(comScore)
 	}
 	
+	$('#point').text((myScore - comScore) * winsrec)
 }

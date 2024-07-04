@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.tjoeun.tag.dao.MybatisDAO;
 import com.tjoeun.tag.vo.CommentList;
 import com.tjoeun.tag.vo.CommentVO;
+import com.tjoeun.tag.vo.MycommentVO;
 import com.tjoeun.tag.vo.Param;
 import com.tjoeun.tag.vo.TrendList;
 import com.tjoeun.tag.vo.TrendVO;
@@ -95,12 +96,19 @@ public class HomeController {
 		logger.info("content page");
 		return "content";
 	}
-
-	@RequestMapping("/game1")
-	public String game1(HttpServletRequest request, Model model) {
-		logger.info("game content1 page");
-		return "game1";
+	
+	@RequestMapping("/rps")
+	public String rps(HttpServletRequest request, Model model) {
+	      // logger.info("game content1 page");
+		return "rps";
 	}
+	   
+	@RequestMapping("/yabaui")
+    public String yabaui(HttpServletRequest request, Model model) {
+		// logger.info("game content1 page");
+		return "yabaui";
+	}
+	   
 	
 	// ================================================== 현담 =================================================
 	
@@ -119,14 +127,7 @@ public class HomeController {
 		hmap.put("endNo", trendList.getEndNo());
 		trendList.setList(mapper.selectList(hmap));
 		System.out.println("===============>" + trendList.getList().size());
-		
-		// 리스트의 트렌드 글 하나(VO)마다 댓글 수를 얻어와 저장한다
-		for (int i = 0; i < trendList.getList().size(); i++) {
-			int ccount = mapper.selectCommentCount(trendList.getList().get(i).getTnum());
-			trendList.getList().get(i).setCcount(ccount);
-		}
-		
-		// 리스트를 뷰페이지로 넘겨준다.
+
 		model.addAttribute("trendList", trendList);
 		
 		return "list";
@@ -137,7 +138,7 @@ public class HomeController {
 	public String list2(HttpServletRequest request, Model model) {
 		System.out.println("컨트롤러 리스트2 메소드 실행");
 		
-		// 현재 완성된 게임 3가지 필수 출력 후 나머지 부분은 트렌트로 채움
+		// 현재 완성된 게임 4가지 필수 출력 후 나머지 부분은 트렌트로 채움
 		
 		// 맵퍼를 불러온다
 		MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
@@ -151,11 +152,6 @@ public class HomeController {
 		trendList.setList(mapper.selectList(hmap));
 		System.out.println("===============>" + trendList.getList().size());
 		
-		// 리스트의 트렌드 글 하나(VO)마다 댓글 수를 얻어와 저장한다
-		for (int i = 0; i < trendList.getList().size(); i++) {
-			int ccount = mapper.selectCommentCount(trendList.getList().get(i).getTnum());
-			trendList.getList().get(i).setCcount(ccount);
-		}
 		// 리스트를 뷰페이지로 넘겨준다.
 		model.addAttribute("trendList", trendList);
 		
@@ -380,12 +376,14 @@ public class HomeController {
 		int usernum = (int) session.getAttribute("usernum");
 		int tnum = Integer.parseInt(request.getParameter("tnum"));
 		String title = request.getParameter("title");
+		String writer = request.getParameter("writer");
 		int lnum = Integer.parseInt(request.getParameter("lnum"));
+		// System.out.println("tnum: " + tnum + ", lnum: " + lnum + ", title: " + title + ", writer: " + writer);
 		HashMap<String, Integer> hmap = new HashMap<String, Integer>();
 		hmap.put("usernum", usernum);
 		hmap.put("tnum", tnum);
 		int scrapfirst = mapper.scrapfirst(hmap);
-		Param param = new Param(tnum, lnum, usernum, title);
+		Param param = new Param(tnum, lnum, usernum, title, writer);
 		if (scrapfirst == 0) {
 			mapper.scrapInsert(param);
 			request.setAttribute("msg", "스크랩완료");
@@ -624,6 +622,8 @@ public class HomeController {
 		{
 			MybatisDAO mapper = sqlSession.getMapper(MybatisDAO.class);
 			UserVO uo = mapper.Myinfo((String) session.getAttribute("nickname"));
+			int scrapCnt = mapper.scrapCnt((Integer) session.getAttribute("usernum"));
+			model.addAttribute("scrapCnt",scrapCnt); 
 			int commentCnt = mapper.commentCnt((String) session.getAttribute("nickname"));
 			model.addAttribute("uo",uo);
 			model.addAttribute("commentCnt",commentCnt);
@@ -662,10 +662,28 @@ public class HomeController {
 	public String MyComment(HttpSession session, HttpServletResponse response,HttpServletRequest request, Model model) throws IOException {
 		if (session.getAttribute("nickname") != null)
 		{
-			List<CommentVO> co = sqlSession.selectList("com.tjoeun.tag.dao.MybatisDAO.MyComment",session.getAttribute("nickname"));
+			List<MycommentVO> co = sqlSession.selectList("com.tjoeun.tag.dao.MybatisDAO.MyComment",session.getAttribute("usernum"));
 			model.addAttribute("co",co);
-			System.out.println(co);
 			return "MyComment";
+		}
+		else
+		{
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>alert('로그인 후 이용 가능합니다.');location.href='./list'</script>");
+			out.flush();
+			return "index";
+		}
+	}
+
+	@RequestMapping("/MyScrap")
+	public String MyScrap(HttpSession session, HttpServletResponse response,HttpServletRequest request, Model model) throws IOException {
+		if (session.getAttribute("nickname") != null)
+		{
+			List<CommentVO> vo = sqlSession.selectList("com.tjoeun.tag.dao.MybatisDAO.MyScrap",session.getAttribute("usernum"));
+			System.out.println("vo: " + vo);
+			model.addAttribute("vo",vo);
+			return "Scrap";
 		}
 		else
 		{

@@ -12,12 +12,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <script type="text/javascript" src="./js/list.js" defer="defer"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <script type="text/javascript" src="./js/mainjs.js" defer="defer"></script>
 <script type="text/javascript" src="./js/Account.js" defer="defer"></script>
-<link rel="stylesheet" href="./css/list.css" />
+<link rel="stylesheet" href="./css/list2.css" />
 </head>
 <body>
 <fmt:requestEncoding value="UTF-8"/>
@@ -26,20 +25,23 @@
 	<img class="logo" alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
 	
 	<div style="display: flex; justify-content: center; flex-grow: 1;">
-		<button type="button" class="btn btn-outline-dark" style="width: 50%;" onclick="location.href='list'"><i class="bi bi-list">Trend</i></button>
+		<button type="button" class="btn btn-outline-dark" style="width: 35%;" onclick="location.href='list'"><i class="bi bi-list">Trend</i></button>
+		<button type="button" class="btn btn-outline-dark" style="width: 35%;" onclick="location.href='index'"><i class="bi bi-house">Index</i></button>
 	</div>
 	
 	<div id="searchbox" style="display: none;">
 		<form id="search" action="search" method="post">
 			<div style="display: flex;">
-				<input type="text" class="form-control" name="searchval" maxlength="10" placeholder="Search">
-				<button type="submit" class="btn btn-outline-light">Search</button>
+				<input type="text" class="form-control" style="width: 10rem;" name="searchval" maxlength="10" placeholder="Search">
+				<button type="submit"
+					style="-webkit-backdrop-filter: invert(100%);
+					backdrop-filter: invert(100%);"
+					class="btn btn-outline-light">Search</button>
 			</div>
 		</form>
 	</div>
-	<div style="width: 10rem;">
+	<div style="width: 7.5rem;">
 		<button type="button" class="btn btn-outline-dark" onclick="showsearchbox()"><i class="bi bi-search"></i></button>
-		<button type="button" class="btn btn-outline-dark" onclick="location.href='./list'"><i class="bi bi-list"></i></button>
 		<button type="button" class="btn btn-outline-dark" onclick="showloginbox()"><i class="bi bi-person"></i></button>
 	</div>
 </div>
@@ -234,34 +236,34 @@
 					</div>
 				</div>
 				<div data-mdb-input-init class="form-outline mb-4">
-					<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./Myinfo'">
-						내 정보
-					</button>
-				</div>
-
-				<div data-mdb-input-init class="form-outline mb-4">
-					<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./Scrap'">
-						스크랩
-					</button>
-				</div>
-
-				<div data-mdb-input-init class="form-outline mb-4">
-					<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyComment'">
-						내 댓글
-					</button>
-				</div>
-
-				<div data-mdb-input-init class="form-outline mb-4">
-					<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;">
-						Game
-					</button>
-				</div>
-
-				<div data-mdb-input-init class="form-outline mb-4">
-					<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%; color: red" onclick="location.href='./logout'">
-						Logout
-					</button>
-				</div>
+	                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="window.open('./Myinfo','userinfo','width=500, height=400,scrollbars=no, resizable=no, toolbars=no, menubar=no')">
+	                    내 정보
+	                </button>
+	            </div>
+	
+	            <div data-mdb-input-init class="form-outline mb-4">
+	                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyScrap'">
+	                    스크랩
+	                </button>
+	            </div>
+	
+	            <div data-mdb-input-init class="form-outline mb-4">
+	                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyComment'">
+	                    내 댓글
+	                </button>
+	            </div>
+	
+	            <div data-mdb-input-init class="form-outline mb-4">
+	                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./list2'">
+	                    Game
+	                </button>
+	            </div>
+	
+	            <div data-mdb-input-init class="form-outline mb-4">
+	                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%; color: red" onclick="location.href='./logout'">
+	                    Logout
+	                </button>
+	            </div>
 			</div>
 		</div>
 	</c:if>
@@ -275,139 +277,98 @@
 
 <!-- 메인 -->
 <main id="main-wrapper" class="container-fluid">
-	<div id="main" class="container-fluid w-75 d-flex">
-		${test}
-		<!-- 콘텐츠 3개씩 보여주는 박스 -->
-		<div id="contents-boxes" class="container w-75">
-			<div id="contents-line-1" class="d-flex flex-wrap">
-				<!-- 게임은 무조건 출력 -->
-				<% 
-					String letters = "0123456789ABCDEF";
-					String colorcode = "#";
-					for (int i = 0; i < 6; i++){
-						colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
-					}
-					colorcode += "A8";
-				%>
-				<div class="cont text-center my-3 rounded-5 container-fluid position-relative" style="width: 30%; height: 25dvh; background-color: <%=colorcode %>">
-					<div class="container-fluid h-75 text-center align-middle">
-						<h2 class="title">업다운 게임</h2>			
-					</div>
-					<a class="stretched-link text-decoration-none text-black" href="./updown">
-						<span class="title fw-bold">숫자를 맞춰보세요</span><br/>
-					</a>
-				</div>
-				<% 
-					letters = "0123456789ABCDEF";
-					colorcode = "#";
-					for (int i = 0; i < 6; i++){
-						colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
-					}
-					colorcode += "A8";
-				%>
-				<div class="cont text-center my-3 rounded-5 container-fluid position-relative" style="width: 30%; height: 25dvh; background-color: <%=colorcode %>">
-					<div class="container-fluid h-75 text-center align-middle">
-						<h2 class="title">가위바위보 게임</h2>			
-					</div>
-					<a class="stretched-link text-decoration-none text-black" href="./game1">
-						<span class="title fw-bold">컴퓨터를 이겨보세요!</span><br/>
-					</a>
-				</div>
-				<% 
-					letters = "0123456789ABCDEF";
-					colorcode = "#";
-					for (int i = 0; i < 6; i++){
-						colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
-					}
-					colorcode += "A8";
-				%>
-				<div class="cont text-center my-3 rounded-5 container-fluid position-relative" style="width: 30%; height: 25dvh; background-color: <%=colorcode %>">
-					<div class="container-fluid h-75 text-center align-middle">
-						<h2 class="title">숫자야구 게임</h2>			
-					</div>
-					<a class="stretched-link text-decoration-none text-black" href="./numbaseball">
-						<span class="title fw-bold">레벨별로 도전하세요!</span><br/>
-					</a>
-				</div>
-	
-				<!-- 리스트 변수 설정 -->
-				<c:set var="list" value="${trendList.list}"/>
-				
-				<!-- 리스트가 없으면 없다고 출력(쓸일 없겠지만) -->
-				<c:if test="${list.size() == 0}">
-		 			<div class="table-danger">
-		 				<div>
-		 					<marquee>트렌드 컨텐츠가 없습니다.</marquee>
-		 				</div>
-		 			</div>
-		 		</c:if>
-				
-		 		<!-- 리스트가 있으면 리스트 만큼 반복해서 출력 -->
-		 		<c:if test="${list.size() != 0}">
-		 			<!-- 리스트의 아이템 1건을 vo 변수로 설정 / 상태 변수를 view -->
-		 			<c:forEach var="vo" items="${list}" varStatus="view">
-		 			<!-- 매 콘텐츠 마다 반복해서 랜덤 컬러 설정 -->
-		 			<% 
-						letters = "0123456789ABCDEF";
-						colorcode = "#";
-						for (int i = 0; i < 6; i++){
-							colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
-						}
-						colorcode += "A8";
-					%>
-		 			<!-- 인덱스 0~8 (9개) 보이게 model로 넘어온 viewcount 활용 -->
-		 			<c:if test="${view.index < 9}">
-		 			<div class="cont text-center my-3 rounded-5 container-fluid position-relative" style="width: 30%; height: 25dvh; background-color: <%=colorcode %>">
-						<div class="container-fluid h-75 text-center align-middle">
-							<h2 class="title">${vo.tnum}번 글</h2>			
-						</div>
-						<a class="stretched-link text-decoration-none text-black" href="./selectByTnum?tnum=${vo.tnum}">
-							<span class="title fw-bold">${vo.title}</span><br/>
-						</a>
-						<span class="fw-bold">조회수: ${vo.views}</span> / 
-						<span class="fw-bold">댓글수: ${vo.ccount}</span>
-					</div>
-		 			</c:if>
-		 			<!-- 인덱스 9 이상 안 보이게 하기 -->
-		 			<c:if test="${view.index >= 9}">
-		 			<div class="trc cont text-center my-3 rounded-5 container-fluid position-relative" style="width: 30%; height: 25dvh; display: none; background-color: <%=colorcode %>">
-						<div class="container-fluid h-75 text-center align-middle">
-							<h2 class="title">${vo.tnum}번 글</h2>			
-						</div>
-						<a class="stretched-link text-decoration-none text-black" href="./selectByTnum?tnum=${vo.tnum}">
-							<span class="title fw-bold">${vo.title}</span><br/>
-						</a>
-						<span class="fw-bold">조회수: ${vo.views}</span> / 
-						<span class="fw-bold">댓글수: ${vo.ccount}</span>
-					</div>
-		 			</c:if>
-		 			</c:forEach>
-		 		</c:if><!-- 리스트 출력 끝 -->
-			</div>
-			<div id="morediv" class="container text-center align-items-center my-3">
-				<button id="morebtn"
-				class="btn btn-danger" 
-				type="button" 
-				title="콘텐츠 6개 더보기"
-				onclick="setViewcount()">더보기 <i class="bi bi-chevron-down"></i></button>
-				<!-- 더보기 변수 -->
-				<input id="morecount" value=0 type="hidden"/><!-- 더보기 시작번호 -->
-				<input id="last" value="${trendList.totalCount}" type="hidden"/><!-- 모든댓글 수 -->
-			</div>
-		</div>
+   <div id="main" class="container-fluid w-75 d-flex">
+      <!-- 콘텐츠 3개씩 보여주는 박스 -->
+      <div id="contents-boxes" class="container w-75">
+         <div id="contents-line-1" class="d-flex flex-wrap">
+            <!-- 게임은 무조건 출력 -->
+            <% 
+               String letters = "0123456789ABCDEF";
+               String colorcode = "#";
+               for (int i = 0; i < 6; i++){
+                  colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
+               }
+               colorcode += "A8";
+            %>
+            <div class="cont d-flex align-items-center justify-content-center my-3 rounded-5 container-fluid position-relative" 
+               style="width: 47%; min-width: 300px; height: 25dvh; min-height: 240px; background-color: <%=colorcode %>">
+               <div>
+                  <h2 class="title text-center">업다운 게임</h2>
+                  <div class="text-center"><img src="./images/updown_logo.png" width="150"></div>
+                  <a class="stretched-link text-center text-decoration-none text-black" href="./updown">
+                     <span class="title fw-bold">숫자를 맞춰보세요!</span><br/>
+                  </a>
+               </div>
+            </div>
+            <% 
+               letters = "0123456789ABCDEF";
+               colorcode = "#";
+               for (int i = 0; i < 6; i++){
+                  colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
+               }
+               colorcode += "A8";
+            %>
+            <div class="cont d-flex align-items-center justify-content-center my-3 rounded-5 container-fluid position-relative" 
+               style="width: 47%; min-width: 300px; height: 25dvh; min-height: 240px; background-color: <%=colorcode %>">
+               <div>
+                  <h2 class="title text-center">가위바위보 게임</h2>
+                  <div class="text-center"><img src="./images/rps_logo.png" width="150"></div>
+                  <a class="stretched-link text-center text-decoration-none text-black" href="./rps">
+                     <span class="title fw-bold">컴퓨터를 이겨보세요!</span><br/>
+                  </a>
+               </div>
+            </div>
+            <% 
+               letters = "0123456789ABCDEF";
+               colorcode = "#";
+               for (int i = 0; i < 6; i++){
+                  colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
+               }
+               colorcode += "A8";
+            %>
+            <div class="cont d-flex align-items-center justify-content-center my-3 rounded-5 container-fluid position-relative" 
+               style="width: 47%; min-width: 300px; height: 25dvh; min-height: 240px; background-color: <%=colorcode %>">
+               <div>
+                  <h2 class="title text-center">숫자야구 게임</h2>
+                  <div class="text-center"><img src="./images/baseball_logo.png" width="150"></div>      
+                  <a class="stretched-link text-center text-decoration-none text-black" href="./numbaseball">
+                     <span class="title fw-bold">레벨별로 도전하세요!</span><br/>
+                  </a>
+               </div>
+            </div>
+            <% 
+               letters = "0123456789ABCDEF";
+               colorcode = "#";
+               for (int i = 0; i < 6; i++){
+                  colorcode += letters.charAt((int)Math.floor(Math.random() * 16));
+               }
+               colorcode += "A8";
+            %>
+            <div class="cont d-flex align-items-center justify-content-center my-3 rounded-5 container-fluid position-relative" 
+               style="width: 47%; min-width: 300px; height: 25dvh; min-height: 240px; background-color: <%=colorcode %>">
+               <div>
+                  <h2 class="title text-center">야바위 게임</h2>
+                  <div class="text-center"><img src="./images/yabaui_logo.png" width="150"></div>   
+                  <a class="stretched-link text-center text-decoration-none text-black" href="./yabaui">
+                     <span class="title fw-bold">진짜를 찾으세요!</span><br/>
+                  </a>
+               </div>
+            </div>
+         </div>
+      </div>
 
-	</div>
-	
-	<!-- 최상단으로 올려주는 top 버튼을 만들어준다. -->
-	<a id="toTop" class="position-fixed bottom-0 end-0 m-5" href="#" style="display:none;">
-		<i class="bi bi-arrow-up-circle-fill fs-1 text-white"></i>
-	</a >
+   </div>
+   
+   <!-- 최상단으로 올려주는 top 버튼을 만들어준다. -->
+   <a id="toTop" class="position-fixed bottom-0 end-0 m-5" href="#" style="display:none;">
+      <i class="bi bi-arrow-up-circle-fill fs-1 text-white"></i>
+   </a >
 </main>
 				
 
 
 <!-- 풋터 -->
-<footer id="footer-wrapper" class="container-fluid bg-dark">
+<footer id="footer-wrapper" class="container-fluid bg-dark position-fixed bottom-0">
 	<div id="footer" class="container-fluid text-center text-white">
 		&copy; Copywrite Team TAG
 	</div>

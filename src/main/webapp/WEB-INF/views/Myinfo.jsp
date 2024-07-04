@@ -29,29 +29,8 @@
 </head>
 <body>
 <fmt:requestEncoding value="UTF-8"/>
-<!-- 헤더 -->
-<div class="header" style="display: flex; align-items: center; justify-content: space-around; border: 1px solid silver; width: 100%;">
-    <img alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
 
-    <div style="display: flex; justify-content: center; flex-grow: 1;">
-        <button type="button" class="btn btn-outline-dark" style="width: 50%;" onclick="location.href='list'"><i class="bi bi-list">List</i></button>
-    </div>
-
-    <div id="searchbox" style="display: none;">
-        <form id="search" action="search" method="post">
-            <div style="display: flex;">
-                <input type="text" class="form-control" name="searchval" maxlength="10" placeholder="Search">
-                <button type="submit" class="btn btn-outline-light">Search</button>
-            </div>
-        </form>
-    </div>
-    <div style="width: 10rem;">
-        <button type="button" class="btn btn-outline-dark" onclick="showsearchbox()"><i class="bi bi-search"></i></button>
-        <button type="button" class="btn btn-outline-dark" onclick="location.href='game1'"><i class="bi bi-joystick"></i></button>
-        <button type="button" class="btn btn-outline-dark" onclick="showloginbox()"><i class="bi bi-person"></i></button>
-    </div>
-</div>
-
+<h2>내 정보</h2><br/>
 <%-- 세션 정보 받아오기 --%>
 <%
     session = request.getSession();
@@ -131,7 +110,7 @@
     포인트: ${uo.point}<br>
     가입일자: ${uo.jdate}<br>
     내 댓글: ${commentCnt}개<br>
-    내 스크랩: <br>
+    내 스크랩: ${scrapCnt}<br>
 </div>
 
 </body>

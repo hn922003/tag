@@ -2,7 +2,8 @@
 const kor = /[ㄱ-ㅎㅏ-ㅣ가-힣]/g;
 
 /* 특수문자 정규식 */
-const specialChar = /[!?@#$%^&*():;+-=~{}<>\_\[\]\|\\\"\'\,\.\/\`\₩]/g;
+//const specialChar = /[!?@#$%^&*():;+-=~{}<>\_\[\]\|\\\"\'\,\.\/\`\₩]/g;
+const specialChar = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/g;
 
 /* 닉네임 중복 체크 */
 function NickCheck()
@@ -241,7 +242,7 @@ function SignInOk()
                 }
                 else
                 {
-                    alert(data+"님 로그인 되었습니다.");
+                    alert("로그인 되었습니다.");
                     window.location.href="/tag/"
                 }
             },

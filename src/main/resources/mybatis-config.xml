@@ -6,6 +6,7 @@
 		<typeAlias type="com.tjoeun.tag.vo.CommentVO" alias="co"/>
 		<typeAlias type="com.tjoeun.tag.vo.UserVO" alias="uo"/>
 		<typeAlias type="com.tjoeun.tag.vo.TrendList" alias="TrendList"/>
+		<typeAlias type="com.tjoeun.tag.vo.MycommentVO" alias="mcvo"/>
 	</typeAliases>
 </configuration>
 

@@ -38,13 +38,18 @@
 		box-shadow: 0px 0px 1em white, 0.5em 0.5em rgba(0,0,0,0.3);
 	}
 	
+	.aside {
+		position: sticky;
+		top: 100px;
+		right: 100px;
+	}
+	
 </style>
 <title>Trend</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <link rel="icon" href="./images/logo.jpg" type="image/x-icon">
 <script type="text/javascript" src="./js/link.js" defer="defer"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -64,22 +69,25 @@
 	<!-- 콘텐츠 헤더 부분 -->
 	<div class="header" style="display: flex; align-items: center; justify-content: space-around; width: 100%;">
 		<img class="logo" alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
-		
 		<div style="display: flex; justify-content: center; flex-grow: 1;">
-			<button type="button" class="btn btn-outline-dark" style="width: 50%;" onclick="location.href='list'"><i class="bi bi-list">Trend</i></button>
+			<button type="button" class="btn btn-outline-dark" style="width: 25%;" onclick="location.href='index'"><i class="bi bi-house">Index</i></button>
+			<button type="button" class="btn btn-outline-dark" style="width: 25%;" onclick="location.href='list'"><i class="bi bi-list">Trend</i></button>
+			<button type="button" class="btn btn-outline-dark" style="width: 25%;" onclick="location.href='list2'"><i class="bi bi-joystick">Games</i></button>
 		</div>
 		
 		<div id="searchbox" style="display: none;">
 			<form id="search" action="search" method="post">
 				<div style="display: flex;">
-					<input type="text" class="form-control" name="searchval" maxlength="10" placeholder="Search">
-					<button type="submit" class="btn btn-outline-light">Search</button>
+					<input type="text" class="form-control" style="width: 10rem;" name="searchval" maxlength="10" placeholder="Search">
+					<button type="submit"
+						style="-webkit-backdrop-filter: invert(100%);
+						backdrop-filter: invert(100%);"
+						class="btn btn-outline-light">Search</button>
 				</div>
 			</form>
 		</div>
-		<div style="width: 10rem;">
+		<div style="width: 7.5rem;">
 			<button type="button" class="btn btn-outline-dark" onclick="showsearchbox()"><i class="bi bi-search"></i></button>
-			<button type="button" class="btn btn-outline-dark" onclick="location.href='./list2'"><i class="bi bi-joystick"></i></button>
 			<button type="button" class="btn btn-outline-dark" onclick="showloginbox()"><i class="bi bi-person"></i></button>
 		</div>
 	</div>
@@ -273,34 +281,34 @@
 						</div>
 					</div>
 					<div data-mdb-input-init class="form-outline mb-4">
-						<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./Myinfo'">
-							내 정보
-						</button>
-					</div>
-
-					<div data-mdb-input-init class="form-outline mb-4">
-						<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./Scrap'">
-							스크랩
-						</button>
-					</div>
-
-					<div data-mdb-input-init class="form-outline mb-4">
-						<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyComment'">
-							내 댓글
-						</button>
-					</div>
-
-					<div data-mdb-input-init class="form-outline mb-4">
-						<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;">
-							Game
-						</button>
-					</div>
-
-					<div data-mdb-input-init class="form-outline mb-4">
-						<button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%; color: red" onclick="location.href='./logout'">
-							Logout
-						</button>
-					</div>
+		                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="window.open('./Myinfo','userinfo','width=500, height=400,scrollbars=no, resizable=no, toolbars=no, menubar=no')">
+		                    내 정보
+		                </button>
+		            </div>
+		
+		            <div data-mdb-input-init class="form-outline mb-4">
+		                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyScrap'">
+		                    스크랩
+		                </button>
+		            </div>
+		
+		            <div data-mdb-input-init class="form-outline mb-4">
+		                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyComment'">
+		                    내 댓글
+		                </button>
+		            </div>
+		
+		            <div data-mdb-input-init class="form-outline mb-4">
+		                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./list2'">
+		                    Game
+		                </button>
+		            </div>
+		
+		            <div data-mdb-input-init class="form-outline mb-4">
+		                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%; color: red" onclick="location.href='./logout'">
+		                    Logout
+		                </button>
+		            </div>
 				</div>
 			</div>
 		</c:if>
@@ -348,13 +356,13 @@
 					}
 				%>
 				<!-- 슬라이드 -->
-				<div class="container text-center" style="width: 100%; height: 550px;">
+				<div class="container text-center" style="width: 100%; height: 500px;">
 					<div id="trend" class="mx-3 carousel slide" data-bs-ride="carousel" style="width: 97%">
 						<div class="carousel-indicators">
 				  	  		<button type="button" data-bs-target="#trend" data-bs-slide-to="0" class="active" style="background-color: black;"></button>
 						  	<c:forEach var="i" begin="1" end="<%=imageFiles.size()%>">
 							  	<button type="button" data-bs-target="#trend" data-bs-slide-to="${i}" style="background-color: black;"></button>
-						  	</c:forEach>  
+						  	</c:forEach>
 					  	</div>
 						<div class="carousel-inner text-center align-middle">
 							<div class="carousel-item active">
@@ -365,7 +373,7 @@
 									/* out.println("<p>filename: " + fileName + "</p>"); */
 							%>
 									<div class="carousel-item">
-										<img src="image?name=<%= fileName %>" alt="<%= fileName %>"  class="container px-2 d-flex justify-content-center d-block w-60" style="width: 70%; height: 480px;"/><br/>
+										<img src="image?name=<%= fileName %>" alt="<%= fileName %>"  class="container px-2 d-flex justify-content-center d-block w-60" style="width: 70%; height: 500px;"/><br/>
 									</div>
 							<%
 								}
@@ -422,13 +430,14 @@
 		        %>  --%>
 
 				<%-- <br /><br /><p>${vo.maintext}</p><br /><br /> --%>
+				<br/>
 				<p class="d-flex justify-content-end">작성일: ${tdate}</p>
 				<p class="d-flex justify-content-end">작성자: ${vo.writer}</p>
 			</div>
+			
 			<!-- 좋아요, 스크랩, 공유, 목록보기 -->
 			<div class="container px-2 d-flex justify-content-center" style="font-size: 120%;">
 				<p>
-				
 					<!-- 로그인 되어있지 않은 경우 -->
 					<c:if test="<%=nickname == null %>">
 						<button class="btn" type="button" onclick="like();">
@@ -456,12 +465,11 @@
 						<%
 							int usernum = (int) session.getAttribute("usernum");
 						%>
-						<button class="btn" type="button" onclick="location.href='scrap?tnum=${vo.tnum}&title=${vo.title}&lnum=${vo.lnum}&usernum=${usernum}'">
+						<button class="btn" type="button" onclick="location.href='scrap?tnum=${vo.tnum}&title=${vo.title}&writer=${vo.writer}&lnum=${vo.lnum}&usernum=${usernum}'">
 							<i class="bi bi-bookmark" style="color: blue;"></i>
 						</button>
 					</c:if>
-					
-					<!-- <button class="btn" type="button" onclick="clip(); return false;"><i class="bi bi-share-fill"></i>(링크복사)</button> -->
+					&nbsp;&nbsp;&nbsp;
 					<button class="btn" type="button" value="링크복사" onclick="clip(); return false;">
 						<i class="bi bi-share-fill"></i>&nbsp;(링크복사)
 					</button>
@@ -479,7 +487,7 @@
 					
 					<!-- 로그인 되어있지 않은 경우 -->
 					<c:if test="<%=nickname == null %>">
-					<div class="container px-lg-2 d-flex justify-content-center" style="background-color: peachpuff;">
+					<div class="container px-lg-2 d-flex justify-content-center">
 						<textarea rows="2" cols="8" placeholder="댓글을 작성하려면 로그인 해주세요." style="width: 60%; border-radius: 6px;" disabled></textarea>
 						&nbsp;&nbsp;<button class="btn btn-outline-success" disabled>등록</button>
 					</div><br/>
@@ -487,7 +495,7 @@
 
 					<!-- 로그인 되어있는 경우 -->
 					<c:if test="<%=nickname != null %>">
-					<div class="container px-lg-2 d-flex justify-content-center" style="background-color: peachpuff;">
+					<div class="container px-lg-2 d-flex justify-content-center">
 						<textarea rows="3" cols="8" name="memo" style="width: 60%; border-radius: 6px; resize: none;"></textarea> &nbsp;&nbsp;
 						<button class="btn btn-outline-success" type="submit" name="commentForm" style="width: 7%">등록</button>
 					</div><br />
@@ -519,7 +527,7 @@
 										</li>
 									</c:forEach>
 								</ul><br /><br />
-								<a href="#" style="color: black; text-decoration: none;">
+								<a href="list2" style="color: black; text-decoration: none;">
 									<i class="bi bi-joystick" style="font-size: 500%;"></i>
 									<h4>게임하러 가기</h4>
 								</a><br />
@@ -675,7 +683,7 @@
 										</li>
 									</c:forEach>
 								</ul><br /><br />
-								<a href="#" style="color: black; text-decoration: none;">
+								<a href="list2" style="color: black; text-decoration: none;">
 									<i class="bi bi-joystick" style="font-size: 500%;"></i>
 									<h4>게임하러 가기</h4>
 								</a><br />

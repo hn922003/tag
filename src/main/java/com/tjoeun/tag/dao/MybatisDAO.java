@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.tjoeun.tag.vo.CommentVO;
+import com.tjoeun.tag.vo.MycommentVO;
 import com.tjoeun.tag.vo.Param;
 import com.tjoeun.tag.vo.TrendVO;
 import com.tjoeun.tag.vo.UserVO;
@@ -85,28 +86,13 @@ public interface MybatisDAO {
 
 	UserVO Myinfo(String nickname);
 
-	ArrayList<CommentVO> MyComment(String nickname);
+	ArrayList<MycommentVO> MyComment(String nickname);
+
+	ArrayList<CommentVO> MyScrap(int usernum);
 
 	int commentCnt(String nickname);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	int scrapCnt(int usernum);
 
 
 

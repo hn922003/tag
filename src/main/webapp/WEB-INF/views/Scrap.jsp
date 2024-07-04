@@ -25,31 +25,37 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script type="text/javascript" src="./js/mainjs.js" defer="defer"></script>
     <script type="text/javascript" src="./js/list.js" defer="defer"></script>
-    <%--<link rel="stylesheet" href="./css/list.css" />--%>
+    <style>
+        table, th, td {border: 1px solid black;}
+    </style>
+    <link rel="stylesheet" href="./css/mypage.css" />
 </head>
 <body>
 <fmt:requestEncoding value="UTF-8"/>
 <!-- 헤더 -->
-<div class="header" style="display: flex; align-items: center; justify-content: space-around; border: 1px solid silver; width: 100%;">
-    <img alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
-
-    <div style="display: flex; justify-content: center; flex-grow: 1;">
-        <button type="button" class="btn btn-outline-dark" style="width: 50%;" onclick="location.href='list'"><i class="bi bi-list">List</i></button>
-    </div>
-
-    <div id="searchbox" style="display: none;">
-        <form id="search" action="search" method="post">
-            <div style="display: flex;">
-                <input type="text" class="form-control" name="searchval" maxlength="10" placeholder="Search">
-                <button type="submit" class="btn btn-outline-light">Search</button>
-            </div>
-        </form>
-    </div>
-    <div style="width: 10rem;">
-        <button type="button" class="btn btn-outline-dark" onclick="showsearchbox()"><i class="bi bi-search"></i></button>
-        <button type="button" class="btn btn-outline-dark" onclick="location.href='game1'"><i class="bi bi-joystick"></i></button>
-        <button type="button" class="btn btn-outline-dark" onclick="showloginbox()"><i class="bi bi-person"></i></button>
-    </div>
+<div class="header" style="display: flex; align-items: center; justify-content: space-around; width: 100%;">
+	<img class="logo" alt="logo" src="./images/tag_logo1.png" onclick="location.href='index'" style="max-height: 80px;">
+	<div style="display: flex; justify-content: center; flex-grow: 1;">
+		<button type="button" class="btn btn-outline-dark" style="width: 25%;" onclick="location.href='index'"><i class="bi bi-house">Index</i></button>
+		<button type="button" class="btn btn-outline-dark" style="width: 25%;" onclick="location.href='list'"><i class="bi bi-list">Trend</i></button>
+		<button type="button" class="btn btn-outline-dark" style="width: 25%;" onclick="location.href='list2'"><i class="bi bi-joystick">Games</i></button>
+	</div>
+	
+	<div id="searchbox" style="display: none;">
+		<form id="search" action="search" method="post">
+			<div style="display: flex;">
+				<input type="text" class="form-control" style="width: 10rem;" name="searchval" maxlength="10" placeholder="Search">
+				<button type="submit"
+					style="-webkit-backdrop-filter: invert(100%);
+					backdrop-filter: invert(100%);"
+					class="btn btn-outline-light">Search</button>
+			</div>
+		</form>
+	</div>
+	<div style="width: 7.5rem;">
+		<button type="button" class="btn btn-outline-dark" onclick="showsearchbox()"><i class="bi bi-search"></i></button>
+		<button type="button" class="btn btn-outline-dark" onclick="showloginbox()"><i class="bi bi-person"></i></button>
+	</div>
 </div>
 
 <%-- 세션 정보 받아오기 --%>
@@ -59,7 +65,6 @@
     String point = String.valueOf(session.getAttribute("point"));
 %>
 
-<%-- 로그인 박스 --%>
 <div id="loginbox"
      style="position: absolute;
 			top: 6.5rem;
@@ -94,25 +99,25 @@
                 </div>
             </div>
             <div data-mdb-input-init class="form-outline mb-4">
-                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./Myinfo'">
+                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="window.open('./Myinfo','userinfo','width=500, height=400,scrollbars=no, resizable=no, toolbars=no, menubar=no')">
                     내 정보
                 </button>
             </div>
 
             <div data-mdb-input-init class="form-outline mb-4">
-                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;">
+                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyScrap'">
                     스크랩
                 </button>
             </div>
 
             <div data-mdb-input-init class="form-outline mb-4">
-                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;">
+                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./MyComment'">
                     내 댓글
                 </button>
             </div>
 
             <div data-mdb-input-init class="form-outline mb-4">
-                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;">
+                <button type="button" class="btn btn-outline-dark btn-floating mx-1" style="width: 100%;" onclick="location.href='./list2'">
                     Game
                 </button>
             </div>
@@ -126,13 +131,33 @@
     </div>
 </div>
 
-<div>
-    닉네임: ${uo.nickname}<br>
-    이메일: ${uo.email}<br>
-    포인트: ${uo.point}<br>
-    가입일자: ${uo.jdate}<br>
-    내 댓글: <br>
-    내 스크랩: <br>
+<div style="display: flex">
+    <div style="width: 15%;"></div>
+    <div style="width: 70%; height: 100vh; background-color: lightgray;">
+        <div id="maincont">
+            <h2 style="margin-left: 5%"><%=nickname%>님의 스크랩 목록</h2>
+            <hr>
+            <table>
+                <tr style="text-align: center">
+                    <td style="width: 10%">No</td>
+                    <td style="width: 10%">트렌드번호</td>
+                    <td style="width: 15%">작성자</td>
+                    <td style="width: 40%">제목</td>
+                    <td style="width: 10%">좋아요</td>
+                </tr>
+                <c:forEach var="scrap" items="${vo}" varStatus="status">
+                    <tr style="text-align: center">
+                        <td>${status.count}</td>
+                        <td>${scrap.tnum}</td>
+                        <td>${scrap.writer}</td>
+                        <td><a id="tredlink" href="./selectByTnum?tnum=${scrap.tnum}">${scrap.title}</a></td>
+                        <td>${scrap.lnum}</td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </div>
+    </div>
+    <div style="width: 15%;"></div>
 </div>
 
 </body>

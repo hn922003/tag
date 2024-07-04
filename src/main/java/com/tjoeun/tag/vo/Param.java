@@ -8,6 +8,7 @@ public class Param {
 	private int lnum;
 	private int usernum;
 	private String title;
+	private String writer;
 
 	public Param() { }
 
@@ -17,12 +18,13 @@ public class Param {
 		this.memo = memo;
 	}
 
-	public Param(int tnum, int lnum, int usernum, String title) {
+	public Param(int tnum, int lnum, int usernum, String title, String writer) {
 		super();
 		this.tnum = tnum;
 		this.lnum = lnum;
 		this.usernum = usernum;
 		this.title = title;
+		this.writer = writer;
 	}
 
 	public int getCnum() {
@@ -61,11 +63,17 @@ public class Param {
 	public void setUsernum(int usernum) {
 		this.usernum = usernum;
 	}
+	public String getWriter() {
+		return writer;
+	}
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
 
 	@Override
 	public String toString() {
 		return "Param [cnum=" + cnum + ", memo=" + memo + ", tnum=" + tnum + ", lnum=" + lnum + ", usernum=" + usernum
-				+ ", title=" + title + "]";
+				+ ", title=" + title + ", writer=" + writer + "]";
 	}
 
 }
