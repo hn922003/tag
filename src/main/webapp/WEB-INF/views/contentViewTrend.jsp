@@ -610,7 +610,7 @@
 										<c:if test="${view.index >= 5}">
 											<!-- 신고 10 이상이면 안보이게 -->
 											<c:if test="${co.rnum > 10}">
-												<li class="list-group-item" style="background-color: #e7f6e5; border-radius: 6px;">
+												<li class="trc list-group-item" style="display: none; background-color: #e7f6e5; border-radius: 6px;">
 													<br/><p>신고에 의해 삭제된 댓글입니다.</p>
 												</li>
 											</c:if>
